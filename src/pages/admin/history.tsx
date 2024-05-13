@@ -6,10 +6,10 @@ import { Box } from "@chakra-ui/react";
 import { useAdmin } from "@/hooks/useAdmin";
 import RestaurantApplicationCard from "@/components/cards/RestroApplication";
 
-const AdminPage = () => {
-  const { getApplications } = useAdmin();
+const RestroApplicationHistoryPage = () => {
+  const { getHistory } = useAdmin();
 
-  const restaurants = getApplications();
+  const restaurants = getHistory();
 
   return (
     <Box p={5}>
@@ -17,13 +17,16 @@ const AdminPage = () => {
         <RestaurantApplicationCard
           key={restro._id}
           restaurant={restro}
+          isHistory={true}
         ></RestaurantApplicationCard>
       ))}
     </Box>
   );
 };
 
-AdminPage.getLayout = (page: ReactElement) => <AdminLayout>{page}</AdminLayout>;
+RestroApplicationHistoryPage.getLayout = (page: ReactElement) => (
+  <AdminLayout>{page}</AdminLayout>
+);
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const homeRedirect = {
@@ -57,4 +60,4 @@ export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   };
 };
 
-export default AdminPage;
+export default RestroApplicationHistoryPage;

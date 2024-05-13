@@ -1,3 +1,4 @@
+import AnimatedLogo from "@/components/AnimatedLogo";
 import { AppLayout } from "@/components/layouts/AppLayout";
 import { ProfileDashboardLayout } from "@/components/layouts/ProfileDashboardLayout";
 import { useUser } from "@/hooks/useUser";

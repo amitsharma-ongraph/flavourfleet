@@ -1,6 +1,6 @@
 import AddressList from "@/components/AddressList";
 import { useAddAdressModal } from "@/components/Modals/AddAddressModal";
-import { ProfileDashboardLayout } from "@/components/ProfileDashboardLayout";
+import { ProfileDashboardLayout } from "@/components/layouts/ProfileDashboardLayout";
 import { SidebarOption } from "@/components/SideBarOption";
 import { useModal } from "@/hooks/useModal";
 import { useUser } from "@/hooks/useUser";

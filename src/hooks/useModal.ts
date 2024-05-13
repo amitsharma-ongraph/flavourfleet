@@ -15,15 +15,10 @@ export const useModal = (): Returns => {
   const { query } = useRouter();
   const { state, dispatch } = useStore();
 
-  useEffect(() => {
-    console.log("modal changed in the useModal", state.modal);
-  }, [state.modal]);
-
   return {
     modal: state.modal,
     modalLoading: state.modalController.loading,
     setModal(modal) {
-      console.log("set modal called");
       dispatch({
         type: "setModal",
         data: modal,

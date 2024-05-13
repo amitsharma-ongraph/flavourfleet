@@ -26,14 +26,12 @@ export const useUser = (): IUseUserReturns => {
 
     logInWithEmailPassword: async (email, password) => {
       try {
-        console.log("email--->", email);
-        console.log("password--->", password);
         const res = await axios.post("/auth/login", {
           username: email,
           password,
         });
         const { data } = res;
-        console.log("login data", data);
+
         if (data.success) {
           reset();
           setNotification({

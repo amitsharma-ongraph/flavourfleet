@@ -36,7 +36,7 @@ export const useAddress = (): IUseAddressReturns => {
           },
         });
         const { data } = res;
-        console.log("login data", data);
+
         if (data.success) {
           dispatch({
             type: "setUser",
@@ -78,8 +78,7 @@ export const useAddress = (): IUseAddressReturns => {
           push("/login");
           return;
         }
-        console.log("address id", addressId);
-        console.log("userId", user.id);
+
         const res = await axios.post("/user/address/mark-primary", {
           userId: user.id,
           addressId: addressId,

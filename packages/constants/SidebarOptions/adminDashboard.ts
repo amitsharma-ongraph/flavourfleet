@@ -1,15 +1,17 @@
 import { SidebarOptionProps } from "@/components/SideBarOption";
-import {
-  BiHourglass,
-  BiLogOutCircle,
-} from "react-icons/bi";
+import { BiHistory, BiHourglass, BiLogOutCircle } from "react-icons/bi";
 
 export const adminScrollOptions: SidebarOptionProps[] = [
   {
     icon: BiHourglass,
-    children: "Restaurants",
+    children: "Pending",
     paths: ["/admin"],
-  }
+  },
+  {
+    icon: BiHistory,
+    children: "History",
+    paths: ["/admin/history"],
+  },
 ];
 
 export const adminFixedOptions: SidebarOptionProps[] = [

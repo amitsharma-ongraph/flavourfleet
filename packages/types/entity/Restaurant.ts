@@ -10,4 +10,5 @@ export interface Restaurant {
   menuItems: MenuItem[];
   logoUrl: string;
   status: "Approved" | "Pending" | "Rejected";
+  menuGroups: string[];
 }

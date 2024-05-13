@@ -1,5 +1,6 @@
 import { Logo } from "@/components/Logo";
 import { useRestaurant } from "@/hooks/useRestaurant";
+import { useStore } from "@/hooks/useStore";
 import {
   Box,
   Center,
@@ -17,6 +18,7 @@ import { ChangeEvent, useState } from "react";
 
 const WelcomePage = () => {
   const { signUp } = useRestaurant();
+  const { state } = useStore();
   const [imageFile, setImageFile] = useState<File | undefined>();
   const [imageUrl, setImageUrl] = useState<string | null>(null);
 
@@ -46,6 +48,7 @@ const WelcomePage = () => {
       country: country as string,
       zipCode: zipCode as string,
       imageFile: imageFile as File,
+      ownerId: state.user?.id || "",
     });
   };
   return (

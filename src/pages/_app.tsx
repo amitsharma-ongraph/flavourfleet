@@ -12,6 +12,8 @@ import { AuthProvider } from "@/providers/AuthProvider";
 import { StoreProvider } from "@/providers/StoreProvider";
 import { NotificationProvider } from "@/providers/NotificationProvider";
 import { ModalProvider } from "@/providers/modalProvider";
+import { RestroStoreProvider } from "@/providers/restroStoreProvider";
+import { AdminStoreProvider } from "@/providers/adminStoreProvider";
 
 type NextPageWithLayout = NextPage & {
   title?: string;
@@ -29,7 +31,11 @@ const Providers: FC<PropsWithChildren> = ({ children }) => {
       <NotificationProvider>
         <AuthProvider>
           <StoreProvider>
-            <ModalProvider>{children} </ModalProvider>
+            <RestroStoreProvider>
+              <AdminStoreProvider>
+                <ModalProvider>{children} </ModalProvider>
+              </AdminStoreProvider>
+            </RestroStoreProvider>
           </StoreProvider>
         </AuthProvider>
       </NotificationProvider>

@@ -1,4 +1,4 @@
-import { ProfileDashboardLayout } from "@/components/ProfileDashboardLayout";
+import { ProfileDashboardLayout } from "@/components/layouts/ProfileDashboardLayout";
 import axios from "axios";
 import { GetServerSideProps } from "next";
 import React, { ReactElement } from "react";

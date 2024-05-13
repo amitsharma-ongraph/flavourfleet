@@ -78,9 +78,6 @@ export const StoreProvider: FC<PropsWithChildren> = ({ children }) => {
     })();
   }, [userId]);
 
-  useEffect(() => {
-    console.log("modal changed in the store", state.modal);
-  }, [state.modal]);
   return (
     <StoreContext.Provider value={{ state, dispatch }}>
       {children}

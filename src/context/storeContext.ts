@@ -8,6 +8,7 @@ export const StoreContext = createContext<IStoreContext>({
     modalController: {
       loading: false,
     },
+    restaurant: null,
   },
   dispatch: () => {},
 });

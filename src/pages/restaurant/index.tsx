@@ -8,37 +8,31 @@ import {
   Button,
   Image,
 } from "@chakra-ui/react";
-import { RiCheckLine, RiErrorWarningLine } from "react-icons/ri";
+import { RiErrorWarningLine } from "react-icons/ri";
 import Link from "next/link";
 import axios from "axios";
 import { GetServerSideProps } from "next";
 
-import React, { ReactElement, useEffect, useState } from "react";
+import React, { ReactElement } from "react";
 import { Restaurant } from "../../../packages/types/entity/Restaurant";
 import { BiHourglass } from "react-icons/bi";
-import { useStore } from "@/hooks/useStore";
-import { useRouter } from "next/router";
+import { User } from "../../../packages/types/entity/User";
 
 interface Props {
-  restaurant: Restaurant | null;
+  restaurant: (Restaurant & { ownerId: User }) | null;
 }
 function RestaurantPage({ restaurant }: Props) {
   if (!restaurant) {
     return <>Error</>;
   }
-  const { state } = useStore();
-  const { name, logoUrl } = restaurant;
-  const { addressLine, city, country, zipCode } = restaurant.outlets[0];
-  const { dispatch } = useStore();
-  const { push } = useRouter();
 
-  if (restaurant?.status === "Approved") {
-    dispatch({
-      type: "setRestaurant",
-      data: restaurant,
-    });
-    push("/restaurant/dashboard");
-  }
+  const { name, logoUrl } = restaurant;
+  const {
+    name: ownerName,
+    email: ownerEmail,
+    id: ownerId,
+  } = restaurant.ownerId as User;
+  const { addressLine, city, country, zipCode } = restaurant.outlets[0];
 
   const getStatusMessage = () => {
     switch (restaurant?.status) {
@@ -79,8 +73,8 @@ function RestaurantPage({ restaurant }: Props) {
                   <Text fontWeight="bold" fontSize="xl">
                     {name}
                   </Text>
-                  <Text>Owner: {state.user?.name}</Text>
-                  <Text>Email: {state.user?.email}</Text>
+                  <Text>Owner: {ownerName}</Text>
+                  <Text>Email: {ownerEmail}</Text>
                   <Text>
                     Address: {addressLine}, {city}, {zipCode}, {country}
                   </Text>
@@ -139,6 +133,12 @@ export const getServerSideProps: GetServerSideProps<Props> = async (
       permanent: false,
     },
   };
+  const ApprovedRedirect = {
+    redirect: {
+      destination: "/restaurant/dashboard",
+      permanent: false,
+    },
+  };
 
   const { req } = context;
   try {
@@ -152,11 +152,14 @@ export const getServerSideProps: GetServerSideProps<Props> = async (
       }
     );
     const data = await res.data;
-    console.log("data---->", data);
+
     if (data.success === false) {
       return welcomeRedirect;
     }
     if (data.success === true) {
+      if (data.restaurant.status === "Approved") {
+        return ApprovedRedirect;
+      }
       return {
         props: {
           restaurant: data.restaurant,

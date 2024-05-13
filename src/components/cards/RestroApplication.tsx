@@ -1,11 +1,12 @@
-import { Box, Image, VStack, Text, Button } from "@chakra-ui/react";
+import { Box, Image, VStack, Text, Button, Tag } from "@chakra-ui/react";
 import { RestaurantApplication } from "../../../packages/types/entity/RestaurantApplication";
 import { FC } from "react";
 import { useAdmin } from "@/hooks/useAdmin";
 
-const RestaurantApplicationCard: FC<{ restaurant: RestaurantApplication }> = ({
-  restaurant,
-}) => {
+const RestaurantApplicationCard: FC<{
+  restaurant: RestaurantApplication;
+  isHistory?: boolean;
+}> = ({ restaurant, isHistory }) => {
   const {
     _id,
     name,
@@ -43,25 +44,44 @@ const RestaurantApplicationCard: FC<{ restaurant: RestaurantApplication }> = ({
         </VStack>
       </Box>
 
-      <Box p="6" display="flex" flexDirection="column" justifyContent="center">
-        <Button
-          colorScheme="green"
-          mb="2"
-          onClick={() => {
-            approveRestro(_id);
-          }}
+      {!isHistory && (
+        <Box
+          p="6"
+          display="flex"
+          flexDirection="column"
+          justifyContent="center"
         >
-          Accept
-        </Button>
-        <Button
-          colorScheme="red"
-          onClick={() => {
-            rejectRestro(_id);
-          }}
-        >
-          Reject
-        </Button>
-      </Box>
+          <Button
+            colorScheme="green"
+            mb="2"
+            onClick={() => {
+              approveRestro(_id);
+            }}
+          >
+            Accept
+          </Button>
+          <Button
+            colorScheme="red"
+            onClick={() => {
+              rejectRestro(_id);
+            }}
+          >
+            Reject
+          </Button>
+        </Box>
+      )}
+
+      {isHistory && restaurant.status === "Approved" && (
+        <Tag colorScheme="green" m={2} h={"50px"}>
+          Accepted
+        </Tag>
+      )}
+
+      {isHistory && restaurant.status === "Rejected" && (
+        <Tag colorScheme="red" m={2} h={"50px"}>
+          Rejected
+        </Tag>
+      )}
     </Box>
   );
 };

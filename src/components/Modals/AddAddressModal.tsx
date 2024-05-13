@@ -20,7 +20,6 @@ export const useAddAdressModal = (): IAddAddressModalReturns => {
         const { addressLine, city, country, zipCode } = Object.fromEntries(
           new FormData(addressForm).entries()
         );
-        console.log("city---", city);
         const address: Address = {
           city: city.toString(),
           country: country.toString(),
