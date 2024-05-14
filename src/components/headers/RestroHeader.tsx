@@ -7,7 +7,7 @@ import { useRouter } from "next/router";
 import { useNotification } from "@/hooks/useNotification";
 import { useModal } from "@/hooks/useModal";
 
-function Header() {
+function RestroHeader() {
   const { user, userLoaded } = useUser();
   const { push } = useRouter();
   const [showOptions, setShowOptions] = useState<boolean>(false);
@@ -132,4 +132,4 @@ const modalBody: FC = () => {
     </>
   );
 };
-export default Header;
+export default RestroHeader;

@@ -31,6 +31,12 @@ export const StoreProvider: FC<PropsWithChildren> = ({ children }) => {
             ...state,
             restaurant: action.data,
           };
+        case "setLoadingState":{
+          return{
+            ...state,
+            loadingStates:action.data
+          };
+        }
         default:
           return state;
       }
@@ -41,7 +47,10 @@ export const StoreProvider: FC<PropsWithChildren> = ({ children }) => {
       modalController: {
         loading: false,
       },
-      restaurant: null,
+      loadingStates:{
+        formLoading:false,
+        appLoading:false
+      }
     }
   );
 

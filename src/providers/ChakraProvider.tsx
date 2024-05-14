@@ -43,6 +43,7 @@ export const ChakraProvider: FC<PropsWithChildren> = ({ children }) => {
               textRendering: "optimizeLegibility",
               WebkitFontSmoothing: "antialiased",
               MozOsxFontSmoothing: "grayscale",
+              scrollBehavior: "smooth",
             },
             "::-webkit-scrollbar": {
               display: "none",

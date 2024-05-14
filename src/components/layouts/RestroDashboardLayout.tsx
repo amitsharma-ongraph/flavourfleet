@@ -8,11 +8,12 @@ import {
 } from "../../../packages/constants/SidebarOptions/restroDashboard";
 import { useRestroStore } from "@/hooks/useRestroStore";
 import AnimatedLogo from "../AnimatedLogo";
+import { RestroLayout } from "./RestroLayout";
 
 export const RestroDashboardLayout: FC<PropsWithChildren> = ({ children }) => {
   const { state } = useRestroStore();
   return (
-    <AppLayout>
+    <RestroLayout>
       {state.loading && <AnimatedLogo />}
 
       <Grid
@@ -37,6 +38,6 @@ export const RestroDashboardLayout: FC<PropsWithChildren> = ({ children }) => {
           {!state.loading && <>{children}</>}
         </GridItem>
       </Grid>
-    </AppLayout>
+    </RestroLayout>
   );
 };

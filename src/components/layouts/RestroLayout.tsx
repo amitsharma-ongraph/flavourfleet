@@ -2,15 +2,12 @@ import { Box, Flex } from "@chakra-ui/react";
 import { FC, PropsWithChildren } from "react";
 import AppHeader from "../headers/AppHeader";
 import SearchBar from "../SearchBar";
-import { useStore } from "@/hooks/useStore";
-import AnimatedLogo from "../AnimatedLogo";
+import RestroHeader from "../headers/RestroHeader";
 
-export const AppLayout: FC<PropsWithChildren> = ({ children }) => {
-  const {state}=useStore();
+export const RestroLayout: FC<PropsWithChildren> = ({ children }) => {
   return (
     <Box w={"100%"} h={"100vh"} pos={"relative"}>
-      {state.loadingStates.appLoading&&<AnimatedLogo/>}
-      <AppHeader />
+      <RestroHeader />
       <Box
         pos={"absolute"}
         top={0}
@@ -30,7 +27,6 @@ export const AppLayout: FC<PropsWithChildren> = ({ children }) => {
           display={{ sm: "flex", base: "flex", lg: "none" }}
           mt={8}
         >
-          <SearchBar />
         </Flex>
         {children}
       </Box>

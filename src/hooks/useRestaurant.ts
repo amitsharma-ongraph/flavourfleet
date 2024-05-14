@@ -1,10 +1,11 @@
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+
 import { axios } from "../../packages/axios";
 import { Notification } from "../../packages/types/common/Notification";
 import { MenuItem } from "../../packages/types/entity/MenuItem";
 import { useImageUpload } from "./useImageUpload";
 import { useNotification } from "./useNotification";
 import { useRestroStore } from "./useRestroStore";
+import { useMaps } from "./useMaps";
 
 interface INewRestaurant {
   name: string;
@@ -21,7 +22,7 @@ interface IMenuItemRequest {
   description: string;
   imageFile: File | undefined;
   price: number;
-  groupName:string;
+  groupName: string;
 }
 interface IUseRestaurantReturns {
   getMenuItemsByGroup: (menuGroup: string) => MenuItem[];
@@ -29,12 +30,14 @@ interface IUseRestaurantReturns {
   addMenuGroup: (groupName: string) => Promise<Notification | void>;
   addMenuItem: (menuItem: IMenuItemRequest) => Promise<Notification | void>;
   signUp: (restaurant: INewRestaurant) => void;
+  resubmit:()=>void;
 }
 
 export const useRestaurant = (): IUseRestaurantReturns => {
   const { uploadRestroLogo, uploadMenuItemImage } = useImageUpload();
   const { setNotification } = useNotification();
   const { state, dispatch } = useRestroStore();
+  const { getCoordinates } = useMaps();
   const { restaurant } = state;
 
   const getAllGroupNames = () => {
@@ -44,14 +47,14 @@ export const useRestaurant = (): IUseRestaurantReturns => {
     return restaurant.menuGroups;
   };
 
-
   return {
     getMenuItemsByGroup: (menuGroup) => {
       if (!restaurant) {
         return [];
       }
       return restaurant.menuItems.filter(
-        (menuItem) => menuItem.groupName.toLowerCase() === menuGroup.toLowerCase()
+        (menuItem) =>
+          menuItem.groupName.toLowerCase() === menuGroup.toLowerCase()
       );
     },
     getAllGroupNames,
@@ -94,13 +97,13 @@ export const useRestaurant = (): IUseRestaurantReturns => {
     },
     addMenuItem: async (menuItem) => {
       try {
-        if(!restaurant){
+        if (!restaurant) {
           return {
-            type:"error",
-            title:"Error while accessing you restaurant info"
-          }
+            type: "error",
+            title: "Error while accessing you restaurant info",
+          };
         }
-        const { name, description, price, imageFile ,groupName} = menuItem;
+        const { name, description, price, imageFile, groupName } = menuItem;
 
         if (!imageFile) {
           setNotification({
@@ -127,27 +130,30 @@ export const useRestaurant = (): IUseRestaurantReturns => {
           price,
           imageUrl: url,
           restroId: state.restaurant?._id,
-          groupName
+          groupName,
         });
         const { data } = res;
         if (data.success === true) {
           dispatch({
-            type:"setRestaurant",
-            data:{
+            type: "setRestaurant",
+            data: {
               ...restaurant,
-              menuItems:[...restaurant.menuItems,{
-                _id:data.menuItemId,
-                name,
-                price,
-                groupName,
-                ratings: "4.0",
-                totalReview: 0,
-                imageUrl:url,
-                description,
-                totalOrders: 0,
-              }]
-            }
-          })
+              menuItems: [
+                ...restaurant.menuItems,
+                {
+                  _id: data.menuItemId,
+                  name,
+                  price,
+                  groupName,
+                  ratings: "4.0",
+                  totalReview: 0,
+                  imageUrl: url,
+                  description,
+                  totalOrders: 0,
+                },
+              ],
+            },
+          });
           setNotification({
             type: "success",
             title: "Item Added Succefully",
@@ -183,6 +189,23 @@ export const useRestaurant = (): IUseRestaurantReturns => {
           });
           return;
         }
+        const coordinatesResult = await getCoordinates({
+          addressLine1: addressLine,
+          city,
+          country,
+          pincode: zipCode,
+        });
+        if (!coordinatesResult.success) {
+          setNotification({
+            type: "error",
+            title: coordinatesResult.message || "",
+          });
+          return;
+        }
+        const { lon: longitude, lat: latitude } = coordinatesResult;
+
+        console.log("longitude--->", longitude);
+        console.log("latitude", latitude);
         const url = await uploadRestroLogo(imageFile);
         if (!url) {
           setNotification({
@@ -199,6 +222,8 @@ export const useRestaurant = (): IUseRestaurantReturns => {
           zipCode,
           logoUrl: url,
           ownerId,
+          longitude,
+          latitude,
         });
         const { data } = res;
         if (data.success === true) {
@@ -215,5 +240,30 @@ export const useRestaurant = (): IUseRestaurantReturns => {
         }
       } catch (error) {}
     },
+    resubmit:async()=>{
+      try {
+        const res=await axios.delete("/restaurant/delete");
+        const {data}=res
+        if(data.success==true){
+          setNotification({
+            type:"success",
+            title:"You can resubmit your application",
+            path:"/restaurant/welcome"
+          })
+          return 
+        }
+        else{
+          setNotification({
+            type:"error",
+            title:"Can'nt resbumit application at this moment"
+          })
+        }
+      } catch (error) {
+        setNotification({
+          type:"error",
+          title:"Can'nt resbumit application at this moment"
+        })
+      }
+    }
   };
 };

@@ -14,6 +14,8 @@ import {
   Button,
   Flex,
 } from "@chakra-ui/react";
+import axios from "axios";
+import { GetServerSideProps } from "next";
 import { ChangeEvent, useState } from "react";
 
 const WelcomePage = () => {
@@ -140,6 +142,49 @@ const WelcomePage = () => {
       </Center>
     </Box>
   );
+};
+
+export const getServerSideProps: GetServerSideProps<{}> = async (
+  context
+) => {
+  const logInRedirect = {
+    redirect: {
+      destination: "/login",
+      permanent: false,
+    },
+  };
+
+  const restroRedirect = {
+    redirect: {
+      destination: "/restaurant",
+      permanent: false,
+    },
+  };
+
+  const { req } = context;
+  try {
+    const res = await axios.get(
+      process.env.BASE_API_URL + "/restaurant/available",
+      {
+        withCredentials: true,
+        headers: {
+          Cookie: req.headers.cookie,
+        },
+      }
+    );
+    const data = await res.data;
+
+    if (data.success === true) {
+     return restroRedirect
+    }
+  } catch (error) {
+    return logInRedirect;
+  }
+
+  return {
+    props: {
+    },
+  };
 };
 
 export default WelcomePage;

@@ -17,7 +17,6 @@ function GroupSuggestions() {
     })();
   }, []);
 
-  console.log("suggestions--->", suggestions);
   return (
     <Grid gridTemplateRows={"20px auto"} h={"300px"} w={"full"} mt={5} p={5}>
       <Text as={"h4"} fontWeight={400} color={"brand.900"}>

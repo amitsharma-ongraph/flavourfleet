@@ -17,6 +17,8 @@ import React, { ReactElement } from "react";
 import { Restaurant } from "../../../packages/types/entity/Restaurant";
 import { BiHourglass } from "react-icons/bi";
 import { User } from "../../../packages/types/entity/User";
+import { RestroLayout } from "@/components/layouts/RestroLayout";
+import { useRestaurant } from "@/hooks/useRestaurant";
 
 interface Props {
   restaurant: (Restaurant & { ownerId: User }) | null;
@@ -25,7 +27,7 @@ function RestaurantPage({ restaurant }: Props) {
   if (!restaurant) {
     return <>Error</>;
   }
-
+  const {resubmit}=useRestaurant();
   const { name, logoUrl } = restaurant;
   const {
     name: ownerName,
@@ -65,7 +67,7 @@ function RestaurantPage({ restaurant }: Props) {
               bg={"brand.50"}
             >
               <Box h={"200px"} w={"200px"}>
-                <Image src={logoUrl} alt={name} />
+                <Image src={logoUrl} alt={name} h={"full"} />
               </Box>
 
               <Box p="6" flex="1">
@@ -92,9 +94,12 @@ function RestaurantPage({ restaurant }: Props) {
             </Text>
             <Text>
               Your restaurant application is rejected. Please{" "}
-              <Link href="/signup">sign up again</Link> to resubmit your
+              resubmit your
               application.
             </Text>
+            <Button onClick={resubmit}>
+              Resubmit
+            </Button>
           </>
         );
       default:
@@ -114,7 +119,7 @@ function RestaurantPage({ restaurant }: Props) {
 }
 
 RestaurantPage.getLayout = (page: ReactElement) => (
-  <AppLayout>{page}</AppLayout>
+  <RestroLayout>{page}</RestroLayout>
 );
 
 export const getServerSideProps: GetServerSideProps<Props> = async (

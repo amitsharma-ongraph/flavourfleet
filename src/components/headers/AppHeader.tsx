@@ -35,10 +35,17 @@ function AppHeader() {
           </Box>
         </GridItem>
 
-        <GridItem h={"60px"} ml={20} overflow={"hidden"}>
-            <Flex h={"full"} w={"full"} justifyContent={"center"} alignItems={"center"} px={5} display={{base:"none",lg:"flex"}}>
-            <SearchBar/>
-            </Flex>
+        <GridItem h={"40px"} ml={20}>
+          <Flex
+            h={"full"}
+            w={"full"}
+            justifyContent={"center"}
+            alignItems={"center"}
+            px={5}
+            display={{ base: "none", lg: "flex" }}
+          >
+            <SearchBar />
+          </Flex>
         </GridItem>
 
         <GridItem>

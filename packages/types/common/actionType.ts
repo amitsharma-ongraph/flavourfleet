@@ -2,4 +2,5 @@ export type ActionType =
   | "setUser"
   | "setModal"
   | "setModalController"
-  | "setRestaurant";
+  | "setRestaurant"
+  | 'setLoadingState';
