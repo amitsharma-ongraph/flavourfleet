@@ -1,4 +1,3 @@
-
 import { axios } from "../../packages/axios";
 import { Notification } from "../../packages/types/common/Notification";
 import { MenuItem } from "../../packages/types/entity/MenuItem";
@@ -28,9 +27,10 @@ interface IUseRestaurantReturns {
   getMenuItemsByGroup: (menuGroup: string) => MenuItem[];
   getAllGroupNames: () => string[];
   addMenuGroup: (groupName: string) => Promise<Notification | void>;
+  addCuisine: (cuisineName: string) => Promise<Notification | void>;
   addMenuItem: (menuItem: IMenuItemRequest) => Promise<Notification | void>;
   signUp: (restaurant: INewRestaurant) => void;
-  resubmit:()=>void;
+  resubmit: () => void;
 }
 
 export const useRestaurant = (): IUseRestaurantReturns => {
@@ -95,6 +95,44 @@ export const useRestaurant = (): IUseRestaurantReturns => {
         };
       }
     },
+    addCuisine: async (cuisineName) => {
+      try {
+        if (!restaurant) {
+          return {
+            type: "error",
+            title: "Error while fetching Restaruant Details",
+          };
+        }
+        const res = await axios.post("/restaurant/add-cuisine", {
+          cuisineName,
+          restroId: state.restaurant?._id,
+        });
+        const { data } = res;
+        if (data.success) {
+          dispatch({
+            type: "setRestaurant",
+            data: {
+              ...restaurant,
+              cuisins: [...restaurant?.cuisins, cuisineName],
+            },
+          });
+          return {
+            type: "success",
+            title: "Cuisine Added Succesfully",
+          };
+        }
+        return {
+          type: "error",
+          title: "Error while adding the Cuisine",
+        };
+      } catch (error) {
+        return {
+          type: "error",
+          title: "Error occured while adding the Cuisine",
+        };
+      }
+    },
+
     addMenuItem: async (menuItem) => {
       try {
         if (!restaurant) {
@@ -240,30 +278,29 @@ export const useRestaurant = (): IUseRestaurantReturns => {
         }
       } catch (error) {}
     },
-    resubmit:async()=>{
+    resubmit: async () => {
       try {
-        const res=await axios.delete("/restaurant/delete");
-        const {data}=res
-        if(data.success==true){
+        const res = await axios.delete("/restaurant/delete");
+        const { data } = res;
+        if (data.success == true) {
           setNotification({
-            type:"success",
-            title:"You can resubmit your application",
-            path:"/restaurant/welcome"
-          })
-          return 
-        }
-        else{
+            type: "success",
+            title: "You can resubmit your application",
+            path: "/restaurant/welcome",
+          });
+          return;
+        } else {
           setNotification({
-            type:"error",
-            title:"Can'nt resbumit application at this moment"
-          })
+            type: "error",
+            title: "Can'nt resbumit application at this moment",
+          });
         }
       } catch (error) {
         setNotification({
-          type:"error",
-          title:"Can'nt resbumit application at this moment"
-        })
+          type: "error",
+          title: "Can'nt resbumit application at this moment",
+        });
       }
-    }
+    },
   };
 };

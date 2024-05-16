@@ -100,7 +100,15 @@ function RestroOutletsPage() {
             ))}
           </Flex>
         </Flex>
-        {coordinates && <Flex w={"full"} bg={"brand.300"}></Flex>}
+        {coordinates && (
+          <Flex w={"full"} bg={"brand.300"} h={"300px"}>
+            <Image
+              src={`https://maps.geoapify.com/v1/staticmap?style=osm-carto&width=600&height=400&center=lonlat:${coordinates.longitude},${coordinates.latitude}&zoom=14&marker=lonlat:${coordinates.longitude},${coordinates.latitude};type:material;color:%231f63e6;size:large;icon:cloud;icontype:awesome;whitecircle:no&apiKey=3bb455ff7776401392c680d7299291df`}
+              h={"full"}
+              w={"full"}
+            />
+          </Flex>
+        )}
       </Flex>
     </Box>
   );

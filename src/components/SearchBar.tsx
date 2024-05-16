@@ -11,6 +11,8 @@ import {
 import { BiSearch } from "react-icons/bi";
 import useSearch from "@/hooks/useSearch";
 import LogoImage from "./LogoImage";
+import Link from "next/link";
+import { useRouter } from "next/router";
 
 function SearchBar() {
   const { getSearchOptions } = useSearch();
@@ -19,6 +21,8 @@ function SearchBar() {
   const [options, setOptions] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [activeIndex, setActiveIndex] = useState<number>(-1);
+
+  const { push } = useRouter();
 
   const handleClickOutside = (event: MouseEvent) => {
     const target = event.target as HTMLElement;
@@ -151,6 +155,11 @@ function SearchBar() {
                 _hover={{ bg: "#f0f0f0" }}
                 onMouseEnter={() => {
                   setActiveIndex(i);
+                }}
+                onClick={() => {
+                  setKeyword("");
+                  setOptions([]);
+                  push(`/search/${option.value}`);
                 }}
               >
                 <Flex

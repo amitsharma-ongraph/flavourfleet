@@ -28,7 +28,7 @@ function GroupSuggestions() {
         rowGap={2.5}
         flexWrap={"wrap"}
         h={"280px"}
-        alignItems={"flex-start"}
+        alignItems={"center"}
         columnGap={2.5}
         overflowX={"scroll"}
       >

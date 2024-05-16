@@ -1,5 +1,5 @@
 export interface MenuItem {
-  _id:string;
+  _id: string;
   name: string;
   price: number;
   groupName: string;
@@ -7,5 +7,5 @@ export interface MenuItem {
   totalReview: number;
   imageUrl: string;
   description: string;
-  totalOrders: number;
+  totalOrders?: number;
 }

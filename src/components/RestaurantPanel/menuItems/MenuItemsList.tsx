@@ -1,8 +1,7 @@
 import React, { FC } from "react";
-import { MenuItem } from "../../../packages/types/entity/MenuItem";
-import AnimatedLogo from "../AnimatedLogo";
+import { MenuItem } from "../../../../packages/types/entity/MenuItem";
+import AnimatedLogo from "../../AnimatedLogo";
 import { Flex } from "@chakra-ui/react";
-import { wrap } from "module";
 import MenuItemCard from "./MenuItemCard";
 
 const MenuItemsList: FC<{ itemList: MenuItem[] }> = ({ itemList }) => {

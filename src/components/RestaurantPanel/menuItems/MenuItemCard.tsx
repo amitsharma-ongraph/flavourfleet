@@ -1,5 +1,5 @@
 import React, { FC } from "react";
-import { MenuItem } from "../../../packages/types/entity/MenuItem";
+import { MenuItem } from "../../../../packages/types/entity/MenuItem";
 import { Box, Flex, Grid, Image, Text } from "@chakra-ui/react";
 import { FaStar } from "react-icons/fa";
 import { CiStar } from "react-icons/ci";
@@ -45,7 +45,7 @@ const MenuItemCard: FC<{ item: MenuItem }> = ({ item }) => {
         <Image src={imageUrl} h={"full"} w={"full"}></Image>
       </Box>
       <Flex flexDirection={"column"} rowGap={2}>
-        <Text>{name}</Text>
+        <Text fontSize={"0.8em"}>{name}</Text>
         <Flex flexDirection={"row"} alignItems="center" columnGap={2}>
           <Flex flexDirection={"row"} alignItems="center">
             {stars}
@@ -54,7 +54,7 @@ const MenuItemCard: FC<{ item: MenuItem }> = ({ item }) => {
         </Flex>
         <Text fontSize={"0.6em"}>{formattedPrice}</Text>
         <Text fontSize={"0.6em"}>{totalOrders} orders</Text>
-        <Text fontSize={"0.6em"}>{description}</Text>
+        <Text fontSize={"0.6em"}>{description.substring(0, 35)}</Text>
       </Flex>
     </Grid>
   );

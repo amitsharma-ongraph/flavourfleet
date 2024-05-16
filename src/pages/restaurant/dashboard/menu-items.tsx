@@ -1,17 +1,15 @@
 import { useAddMenuGroupModal } from "@/components/Modals/AddMenuGroupModal";
 import { useAddMenuItemModal } from "@/components/Modals/AddMenuItemModal";
 import { RestroDashboardLayout } from "@/components/layouts/RestroDashboardLayout";
-import MenuItemsList from "@/components/menuItems/MenuItemsList";
+import MenuItemsList from "@/components/RestaurantPanel/menuItems/MenuItemsList";
 import { useModal } from "@/hooks/useModal";
 import { useRestaurant } from "@/hooks/useRestaurant";
-import { useRestroStore } from "@/hooks/useRestroStore";
-import { Box, Flex, Grid, Icon, Text } from "@chakra-ui/react";
+import { Box, Flex, Icon, Text } from "@chakra-ui/react";
 import React, { ReactElement, useEffect, useState } from "react";
 import { BiPlusCircle } from "react-icons/bi";
 
 function RestroMenuItemsPage() {
-  const { getAllGroupNames, getMenuItemsByGroup } =
-    useRestaurant();
+  const { getAllGroupNames, getMenuItemsByGroup } = useRestaurant();
   const { setModal } = useModal();
   const { AddMenuGroupModal } = useAddMenuGroupModal();
 
@@ -21,18 +19,17 @@ function RestroMenuItemsPage() {
 
   const menuItems = getMenuItemsByGroup(activeGroup);
 
-
   const [groupNames, setGroupNames] = useState<string[]>(getAllGroupNames());
 
   useEffect(() => {
     setGroupNames(getAllGroupNames());
   }, [getAllGroupNames()]);
 
-  useEffect(()=>{
-    if(groupNames.length>0){
-      setActiveGroup(groupNames[0])
+  useEffect(() => {
+    if (groupNames.length > 0) {
+      setActiveGroup(groupNames[0]);
     }
-  },[groupNames])
+  }, [groupNames]);
   return (
     <Box height={"100%"} width={"100%"}>
       <Flex direction={"column"} rowGap={4} h={"full"} w={"full"}>
@@ -111,7 +108,7 @@ function RestroMenuItemsPage() {
             {menuItems.length === 0 && (
               <Text>No Items available , start by adding an Item</Text>
             )}
-            {menuItems.length>0&&<MenuItemsList itemList={menuItems}/>}
+            {menuItems.length > 0 && <MenuItemsList itemList={menuItems} />}
           </Flex>
         )}
       </Flex>

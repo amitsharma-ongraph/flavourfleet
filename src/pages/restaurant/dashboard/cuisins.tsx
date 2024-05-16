@@ -4,12 +4,15 @@ import { Box, Flex, Icon, Text } from "@chakra-ui/react";
 import React, { ReactElement } from "react";
 import { BiPlusCircle } from "react-icons/bi";
 import { Restaurant } from "../../../../packages/types/entity/Restaurant";
+import { useModal } from "@/hooks/useModal";
+import { useAddCuisineModal } from "@/components/Modals/AddCuisineModal";
 
 function RestroCuisinsPage() {
   const {
     state: { restaurant },
   } = useRestroStore();
-
+  const { setModal } = useModal();
+  const { AddCuisineModal } = useAddCuisineModal();
   const { cuisins } = restaurant as Restaurant;
   return (
     <Box height={"100%"} width={"100%"}>
@@ -31,7 +34,9 @@ function RestroCuisinsPage() {
               cursor={"pointer"}
               borderRadius={"5px"}
               w={"150px"}
-              onClick={() => {}}
+              onClick={() => {
+                setModal(AddCuisineModal);
+              }}
             >
               <Icon as={BiPlusCircle} />
               <Text>Add Cuisine</Text>

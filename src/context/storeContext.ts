@@ -8,10 +8,11 @@ export const StoreContext = createContext<IStoreContext>({
     modalController: {
       loading: false,
     },
-    loadingStates:{
-      formLoading:false,
-      appLoading:false
-    }
+    loadingStates: {
+      formLoading: false,
+      appLoading: false,
+    },
+    cart: {},
   },
   dispatch: () => {},
 });
