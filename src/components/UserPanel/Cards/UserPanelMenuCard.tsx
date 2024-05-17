@@ -17,10 +17,11 @@ interface IMenuItem {
   id: string;
 }
 
-const UserPanelMenuCard: FC<{ menuItem: IMenuItem; restaurantId: string }> = ({
-  menuItem,
-  restaurantId,
-}) => {
+const UserPanelMenuCard: FC<{
+  menuItem: IMenuItem;
+  restaurantId: string;
+  isCartItem?: boolean;
+}> = ({ menuItem, restaurantId, isCartItem }) => {
   const {
     dispatch,
     state: { cart },
@@ -74,7 +75,7 @@ const UserPanelMenuCard: FC<{ menuItem: IMenuItem; restaurantId: string }> = ({
   return (
     <Grid
       flex={1}
-      minWidth={"250px"}
+      minWidth={isCartItem ? "320px" : "250px"}
       maxWidth={{ base: "full", md: "33%", lg: "24%" }}
       h={"160px"}
       boxShadow={"lg"}
@@ -84,6 +85,7 @@ const UserPanelMenuCard: FC<{ menuItem: IMenuItem; restaurantId: string }> = ({
       borderRadius={"20px"}
       gridTemplateColumns={"auto 120px"}
       overflow={"hidden"}
+      id="menuitemcard"
     >
       <Flex
         flexDirection={"column"}

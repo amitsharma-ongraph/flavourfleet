@@ -1,11 +1,20 @@
+import CartCheckoutModalBody from "@/components/Modals/CartCheckoutModalBody";
+import { useModal } from "./useModal";
 import { useStore } from "./useStore";
 
-interface IUseCartReturns {}
+interface IUseCartReturns {
+  showCart: (restoId: string) => void;
+}
 
 export const useCart = (): IUseCartReturns => {
-  const {
-    state: { cart },
-  } = useStore();
+  const { setModal } = useModal();
 
-  return {};
+  return {
+    showCart: (restroId) => {
+      setModal({
+        title: "Order Summary",
+        ModalBody: CartCheckoutModalBody,
+      });
+    },
+  };
 };

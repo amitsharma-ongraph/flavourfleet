@@ -104,152 +104,167 @@ const RestaurantMenu: FC<Props> = ({ restaurant }) => {
   //------------------------------------------------------------>
   return (
     <>
-      <Flex
-        w={"full"}
-        flexDirection={{ base: "column", md: "row" }}
-        rowGap={4}
-        columnGap={4}
-        p={4}
-        alignItems={"center"}
-      >
+      <Box h={"full"} w={"full"} overflowY={"scroll"}>
         <Flex
-          h={"150px"}
           w={"full"}
-          alignItems={{ base: "center", md: "flex-start" }}
-          justifyContent={"space-evenly"}
-          flexDirection={"column"}
-          borderRadius={"20px"}
-          px={{ base: 0, md: 4 }}
-        >
-          <Box h={"35px"} bg={"white"} borderRadius={"17.5px"}>
-            <Text fontSize={"1.8em"} fontWeight={600} color={"brand.900"}>
-              {restaurant.name}
-            </Text>
-          </Box>
-          <TagList tags={restaurant.cuisins}></TagList>
-          <Flex flexDirection={"row"} columnGap={1} alignItems={"center"}>
-            <Flex
-              alignItems={"center"}
-              justifyContent={"center"}
-              bg={"brand.900"}
-              p={"2px"}
-              borderRadius={"5px"}
-              columnGap={1}
-            >
-              <Text
-                color={"white"}
-                h={"full"}
-                textAlign={"center"}
-                fontSize={"0.8em"}
-              >
-                {restaurant.ratings}
-              </Text>
-              <Icon color={"white"} as={BiStar} fontSize={"0.8em"} />
-            </Flex>
-            <Box h={"20px"} bg={"white"} borderRadius={"10px"}>
-              <Text fontSize={"08.em"} color={"brand.900"}>
-                {getTotalRatings()} ratings{" "}
-              </Text>
-            </Box>
-          </Flex>
-          <Flex flexDirection={"row"} columnGap={4}>
-            <Flex
-              alignItems={"center"}
-              justifyContent={"center"}
-              bg={"brand.50"}
-              p={"2px"}
-              borderRadius={"5px"}
-              columnGap={1}
-            >
-              <Icon color={"brand.900"} as={BiStopwatch} fontSize={"0.8em"} />
-              <Text color={"brand.900"} textAlign={"center"} fontSize={"0.8em"}>
-                {getTimeDistance().time} mins
-              </Text>
-              <Box
-                h={"5px"}
-                w={"5px"}
-                borderRadius={"5px"}
-                bg={"brand.900"}
-              ></Box>
-              <Text color={"brand.900"} textAlign={"center"} fontSize={"0.8em"}>
-                {getTimeDistance().distance} km
-              </Text>
-            </Flex>
-            <Flex
-              alignItems={"center"}
-              justifyContent={"center"}
-              bg={"brand.50"}
-              p={"2px"}
-              borderRadius={"5px"}
-              columnGap={1}
-            >
-              <Text color={"brand.900"} textAlign={"center"} fontSize={"0.8em"}>
-                {restaurant.outlets[0].addressLine}
-              </Text>
-            </Flex>
-          </Flex>
-        </Flex>
-        <Box
-          h={{ base: "120px", md: "150px" }}
-          w={"full"}
+          flexDirection={{ base: "column", md: "row" }}
+          rowGap={4}
+          columnGap={4}
+          p={4}
           alignItems={"center"}
-          justifyContent={"center"}
-          overflow={"hidden"}
-          borderRadius={"20px"}
         >
           <Flex
-            h={"full"}
+            h={"150px"}
             w={"full"}
-            flexDirection={"column"}
+            alignItems={{ base: "center", md: "flex-start" }}
             justifyContent={"space-evenly"}
-            alignItems={"center"}
+            flexDirection={"column"}
+            borderRadius={"20px"}
+            px={{ base: 0, md: 4 }}
           >
-            <Flex
-              h={"60px"}
-              w={"full"}
-              flexDirection={"row"}
-              overflowX={"scroll"}
-              columnGap={4}
-              px={2}
-              justifyContent={{ base: "flex-start", md: "center" }}
-            >
-              {TestOffers.map((offer) => (
-                <OfferCard offer={offer} key={offer.title} />
-              ))}
+            <Box h={"35px"} bg={"white"} borderRadius={"17.5px"}>
+              <Text fontSize={"1.8em"} fontWeight={600} color={"brand.900"}>
+                {restaurant.name}
+              </Text>
+            </Box>
+            <TagList tags={restaurant.cuisins}></TagList>
+            <Flex flexDirection={"row"} columnGap={1} alignItems={"center"}>
+              <Flex
+                alignItems={"center"}
+                justifyContent={"center"}
+                bg={"brand.900"}
+                p={"2px"}
+                borderRadius={"5px"}
+                columnGap={1}
+              >
+                <Text
+                  color={"white"}
+                  h={"full"}
+                  textAlign={"center"}
+                  fontSize={"0.8em"}
+                >
+                  {restaurant.ratings}
+                </Text>
+                <Icon color={"white"} as={BiStar} fontSize={"0.8em"} />
+              </Flex>
+              <Box h={"20px"} bg={"white"} borderRadius={"10px"}>
+                <Text fontSize={"08.em"} color={"brand.900"}>
+                  {getTotalRatings()} ratings{" "}
+                </Text>
+              </Box>
             </Flex>
-            <Flex
-              direction={"row"}
-              h={"40px"}
-              alignItems={"center"}
-              px={4}
-              columnGap={2.5}
-              overflowX={"scroll"}
-              mt={2.5}
-            >
-              <FilterOptionCont value="sort">
-                <Icon as={BiSort} color={"brand.900"}></Icon>
-                <Text color={"brand.900"}>Sort</Text>
-                <Icon as={RiArrowDownCircleFill} color={"brand.900"}></Icon>
-              </FilterOptionCont>
-              <FilterOptionCont value="nearest">
-                <Text color={"brand.900"}>Best Sellers</Text>
-              </FilterOptionCont>
-              <FilterOptionCont value="offers">
-                <Text color={"brand.900"}>Rated 4+</Text>
-              </FilterOptionCont>
-              <FilterOptionCont value="veg">
-                <Text color={"brand.900"}>Veg Only</Text>
-              </FilterOptionCont>
+            <Flex flexDirection={"row"} columnGap={4}>
+              <Flex
+                alignItems={"center"}
+                justifyContent={"center"}
+                bg={"brand.50"}
+                p={"2px"}
+                borderRadius={"5px"}
+                columnGap={1}
+              >
+                <Icon color={"brand.900"} as={BiStopwatch} fontSize={"0.8em"} />
+                <Text
+                  color={"brand.900"}
+                  textAlign={"center"}
+                  fontSize={"0.8em"}
+                >
+                  {getTimeDistance().time} mins
+                </Text>
+                <Box
+                  h={"5px"}
+                  w={"5px"}
+                  borderRadius={"5px"}
+                  bg={"brand.900"}
+                ></Box>
+                <Text
+                  color={"brand.900"}
+                  textAlign={"center"}
+                  fontSize={"0.8em"}
+                >
+                  {getTimeDistance().distance} km
+                </Text>
+              </Flex>
+              <Flex
+                alignItems={"center"}
+                justifyContent={"center"}
+                bg={"brand.50"}
+                p={"2px"}
+                borderRadius={"5px"}
+                columnGap={1}
+              >
+                <Text
+                  color={"brand.900"}
+                  textAlign={"center"}
+                  fontSize={"0.8em"}
+                >
+                  {restaurant.outlets[0].addressLine}
+                </Text>
+              </Flex>
             </Flex>
           </Flex>
-        </Box>
-      </Flex>
-      <MenuItemsTable
-        menuItemlist={restaurant.menuItems}
-        groupNames={restaurant.menuGroups}
-        restaurantId={restaurant.id}
-      />
-      <Box w={"full"} h={"125px"}></Box>
+          <Box
+            h={{ base: "120px", md: "150px" }}
+            w={"full"}
+            alignItems={"center"}
+            justifyContent={"center"}
+            overflow={"hidden"}
+            borderRadius={"20px"}
+          >
+            <Flex
+              h={"full"}
+              w={"full"}
+              flexDirection={"column"}
+              justifyContent={"space-evenly"}
+              alignItems={"center"}
+            >
+              <Flex
+                h={"60px"}
+                w={"full"}
+                flexDirection={"row"}
+                overflowX={"scroll"}
+                columnGap={4}
+                px={2}
+                justifyContent={{ base: "flex-start", md: "center" }}
+              >
+                {TestOffers.map((offer) => (
+                  <OfferCard offer={offer} key={offer.title} />
+                ))}
+              </Flex>
+              <Flex
+                direction={"row"}
+                h={"40px"}
+                alignItems={"center"}
+                px={4}
+                columnGap={2.5}
+                overflowX={"scroll"}
+                mt={2.5}
+              >
+                <FilterOptionCont value="sort">
+                  <Icon as={BiSort} color={"brand.900"}></Icon>
+                  <Text color={"brand.900"}>Sort</Text>
+                  <Icon as={RiArrowDownCircleFill} color={"brand.900"}></Icon>
+                </FilterOptionCont>
+                <FilterOptionCont value="nearest">
+                  <Text color={"brand.900"}>Best Sellers</Text>
+                </FilterOptionCont>
+                <FilterOptionCont value="offers">
+                  <Text color={"brand.900"}>Rated 4+</Text>
+                </FilterOptionCont>
+                <FilterOptionCont value="veg">
+                  <Text color={"brand.900"}>Veg Only</Text>
+                </FilterOptionCont>
+              </Flex>
+            </Flex>
+          </Box>
+        </Flex>
+        <MenuItemsTable
+          menuItemlist={restaurant.menuItems}
+          groupNames={restaurant.menuGroups}
+          restaurantId={restaurant.id}
+        />
+        <Box w={"full"} h={"125px"}></Box>
+      </Box>
+      <CartButton />
     </>
   );
 };

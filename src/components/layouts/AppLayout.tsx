@@ -29,6 +29,9 @@ export const AppLayout: FC<PropsWithChildren> = ({ children }) => {
           px={5}
           display={{ sm: "flex", base: "flex", lg: "none" }}
           mt={8}
+          position={"absolute"}
+          top={0}
+          left={0}
         >
           <SearchBar />
         </Flex>

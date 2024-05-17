@@ -60,7 +60,7 @@ function RestaurantMenuPage() {
   }, [restaurant]);
 
   return (
-    <Box w={"full"}>
+    <Box w={"full"} h={"100%"} overflow={"hidden"}>
       {loading && <MenuPagePlaceholder />}
       {restaurant && <RestaurantMenu restaurant={restaurant} />}
       {!loading && !restaurant && <>not found</>}

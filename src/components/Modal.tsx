@@ -37,13 +37,16 @@ export const Modal: FC = () => {
         px: 4,
       }}
     >
-      <ModalOverlay />
+      <ModalOverlay backdropFilter={"blur(2.4px)"} />
       <ModalContent
         pos="relative"
         mx={4}
         rounded="sm"
         bg={"brand.50"}
         borderRadius={"20px"}
+        w={"full"}
+        maxH={"80vh"}
+        overflow={"scroll"}
       >
         <Flex
           pos="absolute"
