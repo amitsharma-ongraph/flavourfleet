@@ -17,9 +17,14 @@ interface IMenuItem {
 interface Props {
   menuItemlist: IMenuItem[];
   groupNames: string[];
+  restaurantId: string;
 }
 
-const MenuItemsTable: FC<Props> = ({ menuItemlist, groupNames }) => {
+const MenuItemsTable: FC<Props> = ({
+  menuItemlist,
+  groupNames,
+  restaurantId,
+}) => {
   const [activeGroup, setActiveGroup] = useState<string>("all");
 
   const getMenuItemsByGroup = () => {
@@ -78,7 +83,11 @@ const MenuItemsTable: FC<Props> = ({ menuItemlist, groupNames }) => {
         rowGap={5}
       >
         {getMenuItemsByGroup().map((menuItem) => (
-          <UserPanelMenuCard menuItem={menuItem} key={menuItem.id} />
+          <UserPanelMenuCard
+            menuItem={menuItem}
+            restaurantId={restaurantId}
+            key={menuItem.id}
+          />
         ))}
       </Flex>
     </>

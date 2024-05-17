@@ -1,7 +1,6 @@
 import React, { FC, PropsWithChildren, useState } from "react";
 import { Address } from "../../../packages/types/entity/Address";
 import { Box, Flex, Icon, Text } from "@chakra-ui/react";
-import MenuItemPlaceholderCard from "../placeholders/MenuItemPlaceholderCard";
 import { BiSort, BiStar, BiStopwatch } from "react-icons/bi";
 import TagList from "./TagList";
 import { TestOffers } from "../../../packages/constants/offers";
@@ -9,6 +8,7 @@ import OfferCard from "./OfferCard";
 import { IoMdRemove } from "react-icons/io";
 import { RiArrowDownCircleFill } from "react-icons/ri";
 import MenuItemsTable from "../UserPanel/Tables/MenuItemsTable";
+import CartButton from "../UserPanel/CartButton";
 
 interface IMenuItem {
   name: string;
@@ -214,7 +214,7 @@ const RestaurantMenu: FC<Props> = ({ restaurant }) => {
               justifyContent={{ base: "flex-start", md: "center" }}
             >
               {TestOffers.map((offer) => (
-                <OfferCard offer={offer} />
+                <OfferCard offer={offer} key={offer.title} />
               ))}
             </Flex>
             <Flex
@@ -247,7 +247,9 @@ const RestaurantMenu: FC<Props> = ({ restaurant }) => {
       <MenuItemsTable
         menuItemlist={restaurant.menuItems}
         groupNames={restaurant.menuGroups}
+        restaurantId={restaurant.id}
       />
+      <Box w={"full"} h={"125px"}></Box>
     </>
   );
 };

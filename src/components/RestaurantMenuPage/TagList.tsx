@@ -2,7 +2,6 @@ import { Box, Flex, Text } from "@chakra-ui/react";
 import React, { FC } from "react";
 
 const TagList: FC<{ tags: string[] }> = ({ tags }) => {
-  console.log("tags-->", tags);
   return (
     <Flex flexDirection={"row"} columnGap={1}>
       {tags.map((tag) => (

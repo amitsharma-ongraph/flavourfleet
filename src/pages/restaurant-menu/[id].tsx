@@ -26,6 +26,7 @@ interface RestroMenuResult {
   menuItems: IMenuItem[];
   logoUrl: string;
   ratings: string;
+  menuGroups: string[];
 }
 function RestaurantMenuPage() {
   const router = useRouter();
@@ -59,7 +60,7 @@ function RestaurantMenuPage() {
   }, [restaurant]);
 
   return (
-    <Box>
+    <Box w={"full"}>
       {loading && <MenuPagePlaceholder />}
       {restaurant && <RestaurantMenu restaurant={restaurant} />}
       {!loading && !restaurant && <>not found</>}

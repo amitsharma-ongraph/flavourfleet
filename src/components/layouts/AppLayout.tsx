@@ -6,10 +6,10 @@ import { useStore } from "@/hooks/useStore";
 import AnimatedLogo from "../AnimatedLogo";
 
 export const AppLayout: FC<PropsWithChildren> = ({ children }) => {
-  const {state}=useStore();
+  const { state } = useStore();
   return (
     <Box w={"100%"} h={"100vh"} pos={"relative"}>
-      {state.loadingStates.appLoading&&<AnimatedLogo/>}
+      {state.loadingStates.appLoading && <AnimatedLogo />}
       <AppHeader />
       <Box
         pos={"absolute"}

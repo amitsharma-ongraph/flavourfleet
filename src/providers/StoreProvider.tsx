@@ -4,6 +4,7 @@ import { Action } from "../../packages/types/common/action";
 import { State } from "../../packages/types/common/state";
 import { useAuth } from "@/hooks/useAuth";
 import { axios } from "../../packages/axios";
+import { ICartItem } from "../../packages/types/entity/ICartItem";
 
 export const StoreProvider: FC<PropsWithChildren> = ({ children }) => {
   const { userId } = useAuth();
@@ -36,6 +37,73 @@ export const StoreProvider: FC<PropsWithChildren> = ({ children }) => {
             ...state,
             loadingStates: action.data,
           };
+        }
+        case "addToCart": {
+          const { restaurantId, menuItem } = action.data;
+          const newCartItem: ICartItem = { quantity: 1, menuItem };
+          const existingCartItems = state.cart[restaurantId] || [];
+          const existingCartItem = existingCartItems.find(
+            (item) => item.menuItem.id === menuItem.id
+          );
+
+          if (existingCartItem) {
+            const updatedCartItems = existingCartItems.map((item) =>
+              item.menuItem.id === menuItem.id
+                ? { ...item, quantity: item.quantity + 1 }
+                : item
+            );
+            return {
+              ...state,
+              cart: {
+                ...state.cart,
+                [restaurantId]: updatedCartItems,
+              },
+            };
+          } else {
+            return {
+              ...state,
+              cart: {
+                ...state.cart,
+                [restaurantId]: [...existingCartItems, newCartItem],
+              },
+            };
+          }
+        }
+        case "removeFromCart": {
+          const { restaurantId, menuItemId } = action.data;
+          const existingCartItems = state.cart[restaurantId] || [];
+          const existingCartItem = existingCartItems.find(
+            (item) => item.menuItem.id === menuItemId
+          );
+
+          if (existingCartItem) {
+            if (existingCartItem.quantity > 1) {
+              const updatedCartItems = existingCartItems.map((item) =>
+                item.menuItem.id === menuItemId
+                  ? { ...item, quantity: item.quantity - 1 }
+                  : item
+              );
+              return {
+                ...state,
+                cart: {
+                  ...state.cart,
+                  [restaurantId]: updatedCartItems,
+                },
+              };
+            } else {
+              const updatedCartItems = existingCartItems.filter(
+                (item) => item.menuItem.id !== menuItemId
+              );
+              return {
+                ...state,
+                cart: {
+                  ...state.cart,
+                  [restaurantId]: updatedCartItems,
+                },
+              };
+            }
+          }
+          return state;
         }
         default:
           return state;

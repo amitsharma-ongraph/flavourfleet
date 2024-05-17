@@ -1,5 +1,8 @@
-import { Box, Flex, Grid, Image, Text } from "@chakra-ui/react";
+import { useCart } from "@/hooks/useCart";
+import { useStore } from "@/hooks/useStore";
+import { Box, Flex, Grid, Icon, Image, Text } from "@chakra-ui/react";
 import React, { FC } from "react";
+import { BiMinus, BiPlus } from "react-icons/bi";
 import { CiStar } from "react-icons/ci";
 import { FaStar } from "react-icons/fa";
 
@@ -14,8 +17,46 @@ interface IMenuItem {
   id: string;
 }
 
-const UserPanelMenuCard: FC<{ menuItem: IMenuItem }> = ({ menuItem }) => {
+const UserPanelMenuCard: FC<{ menuItem: IMenuItem; restaurantId: string }> = ({
+  menuItem,
+  restaurantId,
+}) => {
+  const {
+    dispatch,
+    state: { cart },
+  } = useStore();
+
+  const getItemCount = () => {
+    const cartItems = cart[restaurantId] || [];
+    const cartItem = cartItems.find((item) => item.menuItem.id === menuItem.id);
+    if (cartItem) {
+      return cartItem.quantity;
+    }
+    return 0;
+  };
+
+  const handleAddToCart = () => {
+    dispatch({
+      type: "addToCart",
+      data: {
+        restaurantId,
+        menuItem,
+      },
+    });
+  };
+  const handleRemove = () => {
+    dispatch({
+      type: "removeFromCart",
+      data: {
+        restaurantId,
+        menuItemId: menuItem.id,
+      },
+    });
+  };
+
   const rating = parseFloat(menuItem.ratings);
+
+  const itemCount = getItemCount();
 
   const stars = [];
   for (let i = 0; i < 5; i++) {
@@ -88,10 +129,40 @@ const UserPanelMenuCard: FC<{ menuItem: IMenuItem }> = ({ menuItem }) => {
             border={"solid"}
             borderColor={"brand.900"}
             borderWidth={"1px"}
+            columnGap={1}
+            fontSize={"0.9em"}
+            color={"brand.900"}
+            fontWeight={700}
           >
-            <Text fontSize={"0.9em"} color={"brand.900"} fontWeight={700}>
-              ADD
-            </Text>
+            {itemCount === 0 && (
+              <Flex
+                cursor={"pointer"}
+                onClick={handleAddToCart}
+                h={"full"}
+                w={"full"}
+                justifyContent={"center"}
+                alignItems={"center"}
+              >
+                <Text>ADD</Text>
+              </Flex>
+            )}
+            {itemCount > 0 && (
+              <>
+                <Icon
+                  as={BiMinus}
+                  h={"full"}
+                  cursor={"pointer"}
+                  onClick={handleRemove}
+                ></Icon>
+                <Text fontSize={"1.1em"}>{itemCount}</Text>
+                <Icon
+                  as={BiPlus}
+                  h={"full"}
+                  cursor={"pointer"}
+                  onClick={handleAddToCart}
+                ></Icon>
+              </>
+            )}
           </Flex>
         </Box>
       </Flex>
