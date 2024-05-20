@@ -1,58 +1,35 @@
 import { useCart } from "@/hooks/useCart";
 import { useStore } from "@/hooks/useStore";
-import { Box, Flex, Grid, Icon, Image, Text } from "@chakra-ui/react";
+import { Box, Flex, Grid, Icon, Image, Spinner, Text } from "@chakra-ui/react";
 import React, { FC } from "react";
 import { BiMinus, BiPlus } from "react-icons/bi";
 import { CiStar } from "react-icons/ci";
 import { FaStar } from "react-icons/fa";
-
-interface IMenuItem {
-  name: string;
-  price: number;
-  ratings: string;
-  imageUrl: string;
-  totalReview: number;
-  description: string;
-  groupName: string;
-  id: string;
-}
+import { IUserPMenuItem } from "../../../../packages/types/entity/IUserPMenuItem";
 
 const UserPanelMenuCard: FC<{
-  menuItem: IMenuItem;
+  menuItem: IUserPMenuItem;
   restaurantId: string;
   isCartItem?: boolean;
 }> = ({ menuItem, restaurantId, isCartItem }) => {
   const {
     dispatch,
-    state: { cart },
+    state: {
+      cart,
+      loadingStates: { formLoading },
+    },
   } = useStore();
 
+  const { addToCart, removeFromCart } = useCart();
+
   const getItemCount = () => {
+    console.log(menuItem.id+"------>",cart)
     const cartItems = cart[restaurantId] || [];
     const cartItem = cartItems.find((item) => item.menuItem.id === menuItem.id);
     if (cartItem) {
       return cartItem.quantity;
     }
     return 0;
-  };
-
-  const handleAddToCart = () => {
-    dispatch({
-      type: "addToCart",
-      data: {
-        restaurantId,
-        menuItem,
-      },
-    });
-  };
-  const handleRemove = () => {
-    dispatch({
-      type: "removeFromCart",
-      data: {
-        restaurantId,
-        menuItemId: menuItem.id,
-      },
-    });
   };
 
   const rating = parseFloat(menuItem.ratings);
@@ -139,7 +116,9 @@ const UserPanelMenuCard: FC<{
             {itemCount === 0 && (
               <Flex
                 cursor={"pointer"}
-                onClick={handleAddToCart}
+                onClick={() => {
+                  addToCart(restaurantId, menuItem);
+                }}
                 h={"full"}
                 w={"full"}
                 justifyContent={"center"}
@@ -154,14 +133,18 @@ const UserPanelMenuCard: FC<{
                   as={BiMinus}
                   h={"full"}
                   cursor={"pointer"}
-                  onClick={handleRemove}
+                  onClick={() => {
+                    removeFromCart(restaurantId, menuItem.id);
+                  }}
                 ></Icon>
                 <Text fontSize={"1.1em"}>{itemCount}</Text>
                 <Icon
                   as={BiPlus}
                   h={"full"}
                   cursor={"pointer"}
-                  onClick={handleAddToCart}
+                  onClick={() => {
+                    addToCart(restaurantId, menuItem);
+                  }}
                 ></Icon>
               </>
             )}

@@ -1,6 +1,6 @@
 import { useCart } from "@/hooks/useCart";
 import { useStore } from "@/hooks/useStore";
-import { Box, Flex, Icon, Text } from "@chakra-ui/react";
+import { Box, Flex, Icon, Spinner, Text } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import React from "react";
 import { BiArrowToRight, BiSolidCart } from "react-icons/bi";
@@ -9,7 +9,10 @@ function CartButton() {
   const router = useRouter();
   const id = router.query.id as string;
   const {
-    state: { cart },
+    state: {
+      cart,
+      loadingStates: { formLoading },
+    },
   } = useStore();
   const { showCart } = useCart();
   const totalItems = cart[id]?.length || 0;
@@ -46,11 +49,16 @@ function CartButton() {
             }}
             pointerEvents={"all"}
           >
-            <Icon as={BiSolidCart}></Icon>
-            <Text fontSize={"1em"} fontWeight={600}>
-              {totalItems} Item{totalItems > 1 ? "s" : ""} Added
-            </Text>
-            <Icon as={BiArrowToRight}></Icon>
+            {formLoading && <Spinner />}
+            {!formLoading && (
+              <>
+                <Icon as={BiSolidCart}></Icon>
+                <Text fontSize={"1em"} fontWeight={600}>
+                  {totalItems} Item{totalItems > 1 ? "s" : ""} Added
+                </Text>
+                <Icon as={BiArrowToRight}></Icon>
+              </>
+            )}
           </Flex>
         </Flex>
       )}

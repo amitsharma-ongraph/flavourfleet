@@ -4,5 +4,6 @@ export type ActionType =
   | "setModalController"
   | "setRestaurant"
   | "setLoadingState"
+  | "setCart"
   | "addToCart"
   | "removeFromCart";
