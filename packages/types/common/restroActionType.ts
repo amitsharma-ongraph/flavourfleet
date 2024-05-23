@@ -1,1 +1,5 @@
-export type RestroActionType = "setRestaurant" | "setRestroLoading";
+export type RestroActionType =
+  | "setRestaurant"
+  | "setRestroLoading"
+  | "setOrders"
+  | "updateOrderStatus";

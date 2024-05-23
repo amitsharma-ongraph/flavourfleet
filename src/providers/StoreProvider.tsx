@@ -38,11 +38,11 @@ export const StoreProvider: FC<PropsWithChildren> = ({ children }) => {
             loadingStates: action.data,
           };
         }
-        case "setCart":{
-          return{
+        case "setCart": {
+          return {
             ...state,
-            cart:action.data
-          }
+            cart: action.data,
+          };
         }
         case "addToCart": {
           const { restaurantId, menuItem } = action.data;
@@ -147,7 +147,6 @@ export const StoreProvider: FC<PropsWithChildren> = ({ children }) => {
             type: "setUser",
             data: data.user,
           });
-          console.log("user cart received --->",data.user.carts)
         } else {
           dispatch({
             type: "setUser",
@@ -163,25 +162,22 @@ export const StoreProvider: FC<PropsWithChildren> = ({ children }) => {
     })();
   }, [userId]);
 
-  useEffect(()=>{
-   if(state.user){
-    ;(async()=>{
-
-      try {
-        const res=await axios.get("/cart/get");
-        const {data}=res
-        if(data.success){
-          dispatch({
-            type:"setCart",
-            data:data.cart
-          })
-        }
-      } catch (error) {
-        
-      }
-    })()
-   }
-  },[state.user])
+  useEffect(() => {
+    if (state.user) {
+      (async () => {
+        try {
+          const res = await axios.get("/cart/get");
+          const { data } = res;
+          if (data.success) {
+            dispatch({
+              type: "setCart",
+              data: data.cart,
+            });
+          }
+        } catch (error) {}
+      })();
+    }
+  }, [state.user]);
 
   return (
     <StoreContext.Provider value={{ state, dispatch }}>

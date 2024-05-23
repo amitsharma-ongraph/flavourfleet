@@ -45,7 +45,7 @@ function CartButton() {
             columnGap={3}
             cursor={"pointer"}
             onClick={() => {
-              showCart(id);
+              showCart();
             }}
             pointerEvents={"all"}
           >

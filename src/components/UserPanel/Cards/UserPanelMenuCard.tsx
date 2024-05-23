@@ -23,7 +23,6 @@ const UserPanelMenuCard: FC<{
   const { addToCart, removeFromCart } = useCart();
 
   const getItemCount = () => {
-    console.log(menuItem.id+"------>",cart)
     const cartItems = cart[restaurantId] || [];
     const cartItem = cartItems.find((item) => item.menuItem.id === menuItem.id);
     if (cartItem) {

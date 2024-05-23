@@ -242,8 +242,6 @@ export const useRestaurant = (): IUseRestaurantReturns => {
         }
         const { lon: longitude, lat: latitude } = coordinatesResult;
 
-        console.log("longitude--->", longitude);
-        console.log("latitude", latitude);
         const url = await uploadRestroLogo(imageFile);
         if (!url) {
           setNotification({

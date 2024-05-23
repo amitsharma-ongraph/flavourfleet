@@ -17,7 +17,6 @@ function RestroDashboardPage() {
     outlets: [{ addressLine, city, country, zipCode }],
   } = restroState.restaurant as Restaurant;
 
-  console.log("restaurant details --->", restroState.restaurant);
   return (
     <Box
       borderWidth="1px"

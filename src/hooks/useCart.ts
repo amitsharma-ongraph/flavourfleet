@@ -3,17 +3,18 @@ import { useModal } from "./useModal";
 import { useStore } from "./useStore";
 import { IUserPMenuItem } from "../../packages/types/entity/IUserPMenuItem";
 import { axios } from "../../packages/axios";
+import { useNotification } from "./useNotification";
 
 interface IUseCartReturns {
   addToCart: (restaurantId: string, menuItem: IUserPMenuItem) => Promise<void>;
   removeFromCart: (restaurantId: string, menuItemId: string) => Promise<void>;
-  showCart: (restoId: string) => void;
+  showCart: () => void;
 }
 
 export const useCart = (): IUseCartReturns => {
   const { setModal } = useModal();
   const { dispatch } = useStore();
-
+  const { setNotification } = useNotification();
   return {
     addToCart: async (restaurantId, menuItem) => {
       dispatch({
@@ -24,29 +25,40 @@ export const useCart = (): IUseCartReturns => {
         },
       });
       try {
-        const res=await axios.post("/cart/add",{
-          restaurantId,
-          menuItem
-        })
-      } catch (error) {
-        
-      }
-      dispatch({
-        type: "addToCart",
-        data: {
+        const res = await axios.post("/cart/add", {
           restaurantId,
           menuItem,
-        },
-      });
-      setTimeout(() => {
+        });
+        const { data } = res;
+        if (!data.success) {
+          setNotification({
+            type: "error",
+            title: res.data.message,
+          });
+        }
         dispatch({
-          type: "setLoadingState",
+          type: "addToCart",
           data: {
-            formLoading: false,
-            appLoading: false,
+            restaurantId,
+            menuItem,
           },
         });
-      }, 1200);
+
+        setTimeout(() => {
+          dispatch({
+            type: "setLoadingState",
+            data: {
+              formLoading: false,
+              appLoading: false,
+            },
+          });
+        }, 1200);
+      } catch (error) {
+        setNotification({
+          type: "error",
+          title: "Some error occured",
+        });
+      }
     },
     removeFromCart: async (restaurantId, menuItemId) => {
       dispatch({
@@ -57,33 +69,43 @@ export const useCart = (): IUseCartReturns => {
         },
       });
       try {
-        const res=await axios.post("/cart/remove",{
-          restaurantId,
-          menuItemId
-        })
-      } catch (error) {
-        
-      }
-      dispatch({
-        type: "removeFromCart",
-        data: {
+        const res = await axios.post("/cart/remove", {
           restaurantId,
           menuItemId,
-        },
-      });
-      setTimeout(() => {
+        });
+        const { data } = res;
+        if (!data.success) {
+          setNotification({
+            type: "error",
+            title: res.data.message,
+          });
+        }
         dispatch({
-          type: "setLoadingState",
+          type: "removeFromCart",
           data: {
-            formLoading: false,
-            appLoading: false,
+            restaurantId,
+            menuItemId,
           },
         });
-      }, 1200);
+        setTimeout(() => {
+          dispatch({
+            type: "setLoadingState",
+            data: {
+              formLoading: false,
+              appLoading: false,
+            },
+          });
+        }, 1200);
+      } catch (error) {
+        setNotification({
+          type: "error",
+          title: "Some error occured",
+        });
+      }
     },
-    showCart: (restroId) => {
+    showCart: () => {
       setModal({
-        title: "Order Summary",
+        title: "",
         ModalBody: CartCheckoutModalBody,
       });
     },

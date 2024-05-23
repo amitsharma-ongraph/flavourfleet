@@ -1,5 +1,6 @@
 import useSearch from "@/hooks/useSearch";
 import { Box, Flex, Grid, Image, Text } from "@chakra-ui/react";
+import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 
 interface IGroup {
@@ -10,6 +11,7 @@ interface IGroup {
 function GroupSuggestions() {
   const { getGroupSuggestions } = useSearch();
   const [suggestions, setSuggestions] = useState<IGroup[]>([]);
+  const { push } = useRouter();
 
   useEffect(() => {
     (async () => {
@@ -39,6 +41,10 @@ function GroupSuggestions() {
               h={"125px"}
               gridTemplateRows={"100px 25px"}
               key={i}
+              cursor={"pointer"}
+              onClick={() => {
+                push(`/search/${suggestion.groupName}`);
+              }}
             >
               <Flex justifyContent={"center"} alignItems={"center"}>
                 <Box

@@ -5,6 +5,7 @@ export const RestroStoreContext = createContext<IRestroStoreContext>({
   state: {
     restaurant: null,
     loading: true,
+    orders: [],
   },
   dispatch: () => {},
 });

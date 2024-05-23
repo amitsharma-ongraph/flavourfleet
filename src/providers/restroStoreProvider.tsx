@@ -4,6 +4,8 @@ import { axios } from "../../packages/axios";
 import { RestroState } from "../../packages/types/common/restroState";
 import { RestroAction } from "../../packages/types/common/restroAction";
 import { RestroStoreContext } from "@/context/restroStoreContext";
+import { getUser } from "../../packages/realm";
+import { uint8ArrayToObjectId } from "@/utils/parseObjectId";
 
 export const RestroStoreProvider: FC<PropsWithChildren> = ({ children }) => {
   const { userId } = useAuth();
@@ -21,6 +23,30 @@ export const RestroStoreProvider: FC<PropsWithChildren> = ({ children }) => {
             ...state,
             loading: action.data,
           };
+        case "setOrders":
+          return {
+            ...state,
+            orders: action.data,
+          };
+        case "updateOrderStatus": {
+          const { orderId, status, newTimeline } = action.data;
+
+          return {
+            ...state,
+            orders: state.orders.map((order) =>
+              order.id === orderId
+                ? {
+                    ...order,
+                    status,
+                    timeline: {
+                      ...order.timeline,
+                      ...newTimeline,
+                    },
+                  }
+                : order
+            ),
+          };
+        }
         default:
           return state;
       }
@@ -28,6 +54,7 @@ export const RestroStoreProvider: FC<PropsWithChildren> = ({ children }) => {
     {
       restaurant: null,
       loading: true,
+      orders: [],
     }
   );
 
@@ -55,6 +82,47 @@ export const RestroStoreProvider: FC<PropsWithChildren> = ({ children }) => {
       } catch (error) {}
     })();
   }, [userId]);
+
+  useEffect(() => {
+    const setupChangeStream = async () => {
+      const user = await getUser();
+      const mongo = user.mongoClient("mongodb-atlas");
+      const collection = mongo.db("foodOrdering").collection("orders");
+
+      const handleChange = (
+        change: Realm.Services.MongoDB.ChangeEvent<any>
+      ) => {
+        if (change.operationType === "insert") {
+          console.log("change", uint8ArrayToObjectId(change.fullDocument._id));
+        }
+      };
+
+      try {
+        for await (const change of collection.watch()) {
+          handleChange(change);
+        }
+      } catch (error) {
+        console.error("Error watching collection:", error);
+      }
+    };
+
+    if (state.loading === false) setupChangeStream();
+  }, [state.loading]);
+
+  useEffect(() => {
+    if (state.restaurant) {
+      (async () => {
+        const res = await axios.get("/order/restaurant/get-all");
+        const { data } = res;
+        if (data.success) {
+          dispatch({
+            type: "setOrders",
+            data: data.orderList,
+          });
+        }
+      })();
+    }
+  }, [state.restaurant]);
 
   return (
     <RestroStoreContext.Provider value={{ state, dispatch }}>
