@@ -23,7 +23,7 @@ const TimelineCard: FC<{ timeline: any }> = ({ timeline }) => {
   return (
     <Flex w={"full"} minH={"30px"} flexDirection={"column"}>
       {sortedTimeLine.map((timeEvent, i) => (
-        <>
+        <Box key={i}>
           {i !== 0 && i !== sortedTimeLine.length && (
             <Flex h={"10px"} w={"15px"} justifyContent={"center"}>
               <Box h={"full"} w={"2px"} bg={"brand.900"}></Box>
@@ -46,7 +46,7 @@ const TimelineCard: FC<{ timeline: any }> = ({ timeline }) => {
             </Grid>
             <Text>{timeEvent.time.toLocaleString()}</Text>
           </Flex>
-        </>
+        </Box>
       ))}
     </Flex>
   );

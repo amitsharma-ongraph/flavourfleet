@@ -1,4 +1,5 @@
 import { ICart } from "../entity/ICart";
+import { IUserPOrder } from "../entity/IUserPOrder";
 import { User } from "../entity/User";
 import { LoadingStates } from "./LoadingStates";
 import { Modal } from "./modal";
@@ -11,4 +12,5 @@ export interface State {
   modalController: ModalController;
   loadingStates: LoadingStates;
   cart: ICart;
+  orders: IUserPOrder[];
 }

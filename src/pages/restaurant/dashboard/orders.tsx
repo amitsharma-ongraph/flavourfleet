@@ -3,7 +3,7 @@ import React, { ReactElement, useEffect, useState } from "react";
 import { useRestroStore } from "@/hooks/useRestroStore";
 import { Box, Flex } from "@chakra-ui/react";
 import { OrderStatus } from "../../../../packages/enums/OrderStatus";
-import OrdersList from "@/components/RestaurantPanel/OrdersList";
+import OrdersList from "@/components/RestaurantPanel/RestroPOrdersList";
 
 function RestroOrdersPage() {
   const {

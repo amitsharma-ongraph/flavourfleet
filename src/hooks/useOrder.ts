@@ -14,7 +14,7 @@ interface IUseOrderReturns {
 export const useOrder = (): IUseOrderReturns => {
   const {
     dispatch,
-    state: { cart },
+    state: { cart, orders },
   } = useStore();
   return {
     placeOrder: async (restaurantId, userAddressId, note) => {
@@ -42,9 +42,14 @@ export const useOrder = (): IUseOrderReturns => {
           type: "setCart",
           data: rest,
         });
+        dispatch({
+          type: "setOrders",
+          data: [...orders, data.order],
+        });
         return {
           type: "success",
           title: "Order Placed Successfully",
+          path: "/profile/orders",
         };
       } catch (error) {
         return {

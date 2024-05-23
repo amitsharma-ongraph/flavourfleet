@@ -6,4 +6,6 @@ export type ActionType =
   | "setLoadingState"
   | "setCart"
   | "addToCart"
-  | "removeFromCart";
+  | "removeFromCart"
+  | "setOrders"
+  | "updateOrderStatus";

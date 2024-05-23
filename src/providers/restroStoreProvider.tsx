@@ -5,11 +5,11 @@ import { RestroState } from "../../packages/types/common/restroState";
 import { RestroAction } from "../../packages/types/common/restroAction";
 import { RestroStoreContext } from "@/context/restroStoreContext";
 import { getUser } from "../../packages/realm";
-import { uint8ArrayToObjectId } from "@/utils/parseObjectId";
+import { useNotification } from "@/hooks/useNotification";
 
 export const RestroStoreProvider: FC<PropsWithChildren> = ({ children }) => {
   const { userId } = useAuth();
-
+  const { setNotification } = useNotification();
   const [state, dispatch] = useReducer(
     (state: RestroState, action: RestroAction) => {
       switch (action.type) {
@@ -92,8 +92,29 @@ export const RestroStoreProvider: FC<PropsWithChildren> = ({ children }) => {
       const handleChange = (
         change: Realm.Services.MongoDB.ChangeEvent<any>
       ) => {
-        if (change.operationType === "insert") {
-          console.log("change", uint8ArrayToObjectId(change.fullDocument._id));
+        if (
+          change.operationType === "insert" &&
+          state.restaurant._id == change.fullDocument.restroId.toString()
+        ) {
+          const order = change.fullDocument;
+          order.bill._id = order.bill._id.toString();
+          order.items.forEach((item: any) => {
+            item._id = item._id.toString();
+            item.menuItem._id = item.menuItem._id.toString();
+          });
+          order.restroAddress._id = order.restroAddress._id.toString();
+          order.restroId = order.restroId.toString();
+          order.id = order._id.toString();
+
+          dispatch({
+            type: "setOrders",
+            data: [...state.orders, order],
+          });
+
+          setNotification({
+            type: "success",
+            title: "New Order Received",
+          });
         }
       };
 

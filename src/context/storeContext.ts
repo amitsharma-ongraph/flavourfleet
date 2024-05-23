@@ -13,6 +13,7 @@ export const StoreContext = createContext<IStoreContext>({
       appLoading: false,
     },
     cart: {},
+    orders: [],
   },
   dispatch: () => {},
 });

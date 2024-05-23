@@ -5,6 +5,7 @@ import { State } from "../../packages/types/common/state";
 import { useAuth } from "@/hooks/useAuth";
 import { axios } from "../../packages/axios";
 import { ICartItem } from "../../packages/types/entity/ICartItem";
+import { getUser } from "../../packages/realm";
 
 export const StoreProvider: FC<PropsWithChildren> = ({ children }) => {
   const { userId } = useAuth();
@@ -42,6 +43,30 @@ export const StoreProvider: FC<PropsWithChildren> = ({ children }) => {
           return {
             ...state,
             cart: action.data,
+          };
+        }
+        case "setOrders":
+          return {
+            ...state,
+            orders: action.data,
+          };
+        case "updateOrderStatus": {
+          const { orderId, status, newTimeline } = action.data;
+
+          return {
+            ...state,
+            orders: state.orders.map((order) =>
+              order.id === orderId
+                ? {
+                    ...order,
+                    status,
+                    timeline: {
+                      ...order.timeline,
+                      ...newTimeline,
+                    },
+                  }
+                : order
+            ),
           };
         }
         case "addToCart": {
@@ -126,6 +151,7 @@ export const StoreProvider: FC<PropsWithChildren> = ({ children }) => {
         appLoading: false,
       },
       cart: {},
+      orders: [],
     }
   );
 
@@ -172,6 +198,19 @@ export const StoreProvider: FC<PropsWithChildren> = ({ children }) => {
             dispatch({
               type: "setCart",
               data: data.cart,
+            });
+          }
+        } catch (error) {}
+      })();
+
+      (async () => {
+        try {
+          const res = await axios.get("/order/user/get-all");
+          const { data } = res;
+          if (data.success) {
+            dispatch({
+              type: "setOrders",
+              data: data.orderList,
             });
           }
         } catch (error) {}
