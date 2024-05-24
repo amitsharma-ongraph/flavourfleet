@@ -1,12 +1,12 @@
 import AddressList from "@/components/AddressList";
 import { useAddAdressModal } from "@/components/Modals/AddAddressModal";
 import { ProfileDashboardLayout } from "@/components/layouts/ProfileDashboardLayout";
-import { SidebarOption } from "@/components/SideBarOption";
 import { useModal } from "@/hooks/useModal";
 import { useUser } from "@/hooks/useUser";
 import { Box, Flex, Icon, Text } from "@chakra-ui/react";
 import axios from "axios";
 import { GetServerSideProps } from "next";
+import { useRouter } from "next/router";
 import React, { ReactElement } from "react";
 import { BiPlusCircle } from "react-icons/bi";
 
@@ -14,6 +14,7 @@ function AddressPage() {
   const { setModal } = useModal();
   const { AddAddressModal } = useAddAdressModal();
   const { user } = useUser();
+  const { push } = useRouter();
   return (
     <Box px={4} py={4}>
       <Flex direction={"row"} justifyContent={"flex-end"}>
@@ -27,7 +28,8 @@ function AddressPage() {
           cursor={"pointer"}
           borderRadius={"5px"}
           onClick={() => {
-            setModal(AddAddressModal);
+            // setModal(AddAddressModal);
+            push("/profile/address/add");
           }}
         >
           <Icon as={BiPlusCircle} />

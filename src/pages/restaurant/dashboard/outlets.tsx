@@ -4,6 +4,7 @@ import React, { ReactElement, useEffect, useRef, useState } from "react";
 import { Restaurant } from "../../../../packages/types/entity/Restaurant";
 import { Box, Flex, Heading, Icon, Image, Text } from "@chakra-ui/react";
 import { BiPlusCircle } from "react-icons/bi";
+import Map from "@/components/Map/MapLibreMap";
 
 function RestroOutletsPage() {
   const {
@@ -36,7 +37,7 @@ function RestroOutletsPage() {
   }
   const { outlets } = restaurant as Restaurant;
   return (
-    <Box height={"100%"} width={"100%"}>
+    <Box height={"100%"} width={"100%"} overflowY={"scroll"} pb={"100px"}>
       <Flex direction={"column"} rowGap={4} h={"full"} w={"full"}>
         <Flex direction={"column"} rowGap={4} p={4}>
           <Flex
@@ -101,13 +102,10 @@ function RestroOutletsPage() {
           </Flex>
         </Flex>
         {coordinates && (
-          <Flex w={"full"} bg={"brand.300"} h={"300px"}>
-            <Image
-              src={`https://maps.geoapify.com/v1/staticmap?style=osm-carto&width=600&height=400&center=lonlat:${coordinates.longitude},${coordinates.latitude}&zoom=14&marker=lonlat:${coordinates.longitude},${coordinates.latitude};type:material;color:%231f63e6;size:large;icon:cloud;icontype:awesome;whitecircle:no&apiKey=3bb455ff7776401392c680d7299291df`}
-              h={"full"}
-              w={"full"}
-            />
-          </Flex>
+          <>
+            {/* <OutletMap coordinates={coordinates} /> */}
+            <Map></Map>
+          </>
         )}
       </Flex>
     </Box>

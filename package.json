@@ -12,6 +12,7 @@
     "@chakra-ui/react": "^2.8.2",
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.5",
+    "@types/geojson": "^7946.0.14",
     "axios": "^1.6.8",
     "cloudinary": "^2.2.0",
     "cloudinary-react": "^1.8.1",
