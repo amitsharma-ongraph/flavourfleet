@@ -12,9 +12,7 @@ import { CiGps, CiMapPin } from "react-icons/ci";
 
 const MarkerAddress: FC<{
   coordinates: [number, number];
-  setRedirectCoords: Dispatch<SetStateAction<[number, number] | null>>;
-  userLocation: [number, number] | null;
-}> = ({ coordinates, setRedirectCoords, userLocation }) => {
+}> = ({ coordinates }) => {
   const [loading, setLoading] = useState<Boolean>(false);
   const [address, setAddress] = useState<Address | null>(null);
   useEffect(() => {
@@ -44,35 +42,7 @@ const MarkerAddress: FC<{
     })();
   }, [coordinates]);
   return (
-    <Flex
-      position="absolute"
-      bottom={0}
-      left={0}
-      zIndex="10"
-      w={"100vw"}
-      justifyContent={"center"}
-      alignItems={"center"}
-      rowGap={4}
-      flexDirection={"column"}
-    >
-      <Flex
-        h={"40px"}
-        borderRadius={"20px"}
-        bg={"white"}
-        justifyContent={"space-evenly"}
-        alignItems={"center"}
-        px={4}
-        columnGap={4}
-        color={"brand.900"}
-        cursor={"pointer"}
-        fontWeight={600}
-        onClick={() => {
-          setRedirectCoords(userLocation);
-        }}
-      >
-        <Icon as={CiGps} fontSize={"1.2em"}></Icon>
-        <Text>Use My Current Location</Text>
-      </Flex>
+    <>
       <Flex
         h={"130px"}
         minW={"400px"}
@@ -121,7 +91,7 @@ const MarkerAddress: FC<{
         )}
         {loading && <Spinner />}
       </Flex>
-    </Flex>
+    </>
   );
 };
 

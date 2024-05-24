@@ -7,10 +7,13 @@ import { FaSearch } from "react-icons/fa";
 import {
   Box,
   Flex,
+  Icon,
   Input,
   InputGroup,
   InputLeftElement,
+  Text,
 } from "@chakra-ui/react";
+import { CiGps } from "react-icons/ci";
 
 const AddAddressMap = () => {
   const mapContainer = useRef<HTMLDivElement | null>(null);
@@ -97,16 +100,19 @@ const AddAddressMap = () => {
     new Marker({ color: "blue" }).setLngLat(userLocation).addTo(map);
   }, [userLocation]);
 
-  useEffect(() => {
-    if (!map || !redirectCoords) return;
-    map.easeTo({
-      center: redirectCoords,
-      zoom: 14,
-      duration: 2000,
-    });
-    setCenterCoordinate(redirectCoords);
-  }, [redirectCoords]);
-
+  const handleCurrentLocation = () => {
+    if (map && userLocation) {
+      map.easeTo({
+        center: userLocation,
+        zoom: 17,
+        duration: 2000,
+      });
+      setCenterCoordinate(userLocation);
+      if (centerMarker.current) {
+        centerMarker.current.setLngLat(userLocation);
+      }
+    }
+  };
   return (
     <Box position="relative" width="100vw" height="100vh">
       <Flex
@@ -137,11 +143,35 @@ const AddAddressMap = () => {
         left={0}
       />
       {centerCoordinate && (
-        <MarkerAddress
-          setRedirectCoords={setRedirectCoords}
-          coordinates={centerCoordinate}
-          userLocation={userLocation}
-        />
+        <Flex
+          position="absolute"
+          bottom={0}
+          left={0}
+          zIndex="10"
+          w={"100vw"}
+          justifyContent={"center"}
+          alignItems={"center"}
+          rowGap={4}
+          flexDirection={"column"}
+        >
+          <Flex
+            h={"40px"}
+            borderRadius={"20px"}
+            bg={"white"}
+            justifyContent={"space-evenly"}
+            alignItems={"center"}
+            px={4}
+            columnGap={4}
+            color={"brand.900"}
+            cursor={"pointer"}
+            fontWeight={600}
+            onClick={handleCurrentLocation}
+          >
+            <Icon as={CiGps} fontSize={"1.2em"}></Icon>
+            <Text>Use My Current Location</Text>
+          </Flex>
+          <MarkerAddress coordinates={centerCoordinate} />
+        </Flex>
       )}
     </Box>
   );
