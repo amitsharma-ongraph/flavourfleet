@@ -5,10 +5,12 @@ import { State } from "../../packages/types/common/state";
 import { useAuth } from "@/hooks/useAuth";
 import { axios } from "../../packages/axios";
 import { ICartItem } from "../../packages/types/entity/ICartItem";
-import { getUser } from "../../packages/realm";
+import { getUser } from "../../packages/realm/userApp";
+import { useNotification } from "@/hooks/useNotification";
 
 export const StoreProvider: FC<PropsWithChildren> = ({ children }) => {
   const { userId } = useAuth();
+  const { setNotification } = useNotification();
 
   const [state, dispatch] = useReducer(
     (state: State, action: Action) => {
@@ -51,7 +53,7 @@ export const StoreProvider: FC<PropsWithChildren> = ({ children }) => {
             orders: action.data,
           };
         case "updateOrderStatus": {
-          const { orderId, status, newTimeline } = action.data;
+          const { orderId, status } = action.data;
 
           return {
             ...state,
@@ -60,10 +62,6 @@ export const StoreProvider: FC<PropsWithChildren> = ({ children }) => {
                 ? {
                     ...order,
                     status,
-                    timeline: {
-                      ...order.timeline,
-                      ...newTimeline,
-                    },
                   }
                 : order
             ),
@@ -216,6 +214,51 @@ export const StoreProvider: FC<PropsWithChildren> = ({ children }) => {
         } catch (error) {}
       })();
     }
+  }, [state.user]);
+
+  useEffect(() => {
+    const setupChangeStream = async () => {
+      const user = await getUser();
+      const mongo = user.mongoClient("mongodb-atlas");
+      const collection = mongo.db("foodOrdering").collection("orders");
+
+      const handleChange = (
+        change: Realm.Services.MongoDB.ChangeEvent<any>
+      ) => {
+        if (
+          change.operationType === "update" &&
+          state.user.id == change.fullDocument.userId.toString()
+        ) {
+          dispatch({
+            type: "updateOrderStatus",
+            data: {
+              orderId: change.fullDocument._id.toString(),
+              status: change.fullDocument.status,
+            },
+          });
+          const formatedTitle = change.fullDocument.status
+            .split("_")
+            .reduce((s: string, w: string) => {
+              return s + w[0].toUpperCase() + w.substring(1, w.length);
+            }, "");
+
+          setNotification({
+            type: "success",
+            title: `Your Order Is ${formatedTitle}`,
+          });
+        }
+      };
+
+      try {
+        for await (const change of collection.watch()) {
+          handleChange(change);
+        }
+      } catch (error) {
+        console.error("Error watching collection:", error);
+      }
+    };
+
+    if (state.user) setupChangeStream();
   }, [state.user]);
 
   return (
