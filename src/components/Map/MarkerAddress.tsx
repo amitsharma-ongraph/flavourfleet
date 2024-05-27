@@ -8,18 +8,19 @@ import React, {
   useState,
 } from "react";
 import { Address } from "../../../packages/types/entity/Address";
-import { CiGps, CiMapPin } from "react-icons/ci";
+import { CiMapPin } from "react-icons/ci";
 
 const MarkerAddress: FC<{
   coordinates: [number, number];
-}> = ({ coordinates }) => {
+  handleAddAddress: (address: Address) => Promise<void>;
+}> = ({ coordinates, handleAddAddress }) => {
   const [loading, setLoading] = useState<Boolean>(false);
   const [address, setAddress] = useState<Address | null>(null);
   useEffect(() => {
     (async () => {
       setLoading(true);
       const res = await axios.get(
-        `https://eu1.locationiq.com/v1/reverse?key=pk.c3d20e5ada9b898b95c397b37b407cbb&lat=${coordinates[1]}&lon=${coordinates[0]}&format=json`
+        `https://eu1.locationiq.com/v1/reverse?key=${process.env.NEXT_PUBLIC_LOCATIONIQ_API_KEY}&lat=${coordinates[1]}&lon=${coordinates[0]}&format=json`
       );
       const { data } = res;
       const addresArray = data.display_name.split("_");
@@ -52,6 +53,7 @@ const MarkerAddress: FC<{
         flexDirection={"column"}
         alignItems={"center"}
         justifyContent={"space-evenly"}
+        pointerEvents={"all"}
       >
         {!loading && (
           <>
@@ -84,6 +86,14 @@ const MarkerAddress: FC<{
               fontSize={"1.2em"}
               fontWeight={400}
               cursor={"pointer"}
+              onClick={async () => {
+                if (address)
+                  await handleAddAddress({
+                    ...address,
+                    longitude: coordinates[0].toString(),
+                    latitude: coordinates[1].toString(),
+                  });
+              }}
             >
               Add This Address
             </Flex>

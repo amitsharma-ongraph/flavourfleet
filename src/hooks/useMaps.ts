@@ -1,4 +1,5 @@
-import axios from "axios";
+import { axios } from "../../packages/axios";
+import _axios, { CancelTokenSource } from "axios";
 
 interface IRequestAddress {
   addressLine1: string;
@@ -15,9 +16,12 @@ interface IUseMapsReturns {
   getCoordinates: (
     address: IRequestAddress
   ) => Promise<ICoordinates & { success: boolean; message?: string }>;
+  getAutoComplete: (keyword: string) => Promise<any[]>;
 }
 
 export const useMaps = (): IUseMapsReturns => {
+  let cancleTokenSource: CancelTokenSource | null = null;
+
   return {
     getCoordinates: async (address) => {
       try {
@@ -65,6 +69,30 @@ export const useMaps = (): IUseMapsReturns => {
           lon: "",
           lat: "",
         };
+      }
+    },
+    getAutoComplete: async (keyword) => {
+      if (cancleTokenSource) {
+        cancleTokenSource.cancel("");
+      }
+
+      cancleTokenSource = _axios.CancelToken.source();
+      try {
+        const response = await _axios.get(
+          `https://api.locationiq.com/v1/autocomplete?key=${process.env.NEXT_PUBLIC_LOCATIONIQ_API_KEY}&q=${keyword}`,
+          {
+            cancelToken: cancleTokenSource.token,
+          }
+        );
+        console.log(response.data);
+        return response.data;
+      } catch (error) {
+        if (_axios.isCancel(error)) {
+          console.log("Previous request canceled:", error.message);
+        } else {
+          console.error("Error fetching search results:", error);
+        }
+        return [];
       }
     },
   };

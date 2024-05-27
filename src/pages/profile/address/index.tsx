@@ -11,8 +11,6 @@ import React, { ReactElement } from "react";
 import { BiPlusCircle } from "react-icons/bi";
 
 function AddressPage() {
-  const { setModal } = useModal();
-  const { AddAddressModal } = useAddAdressModal();
   const { user } = useUser();
   const { push } = useRouter();
   return (
@@ -28,7 +26,6 @@ function AddressPage() {
           cursor={"pointer"}
           borderRadius={"5px"}
           onClick={() => {
-            // setModal(AddAddressModal);
             push("/profile/address/add");
           }}
         >

@@ -18,16 +18,6 @@ export const RestroLayout: FC<PropsWithChildren> = ({ children }) => {
         paddingTop={"70px"}
         overflowY={"scroll"}
       >
-        <Flex
-          h={"40px"}
-          w={"full"}
-          justifyContent={"center"}
-          alignItems={"center"}
-          px={5}
-          display={{ sm: "flex", base: "flex", lg: "none" }}
-          mt={8}
-        >
-        </Flex>
         {children}
       </Box>
     </Box>

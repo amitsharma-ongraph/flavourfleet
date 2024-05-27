@@ -8,7 +8,7 @@ import { useNotification } from "./useNotification";
 
 interface IUseAddressReturns {
   PrimaryAddress: Address | null;
-  addAddress: (address: Address) => Promise<Notification | void>;
+  addAddress: (address: Address) => Promise<void>;
   markAsPrimary: (addressId: string | undefined) => void;
 }
 
@@ -23,10 +23,11 @@ export const useAddress = (): IUseAddressReturns => {
       try {
         if (!user?.id) {
           push("/login");
-          return {
+          setNotification({
             type: "error",
             title: "Please Login",
-          };
+          });
+          return;
         }
         const res = await axios.post("/user/add-address", {
           id: user.id,
@@ -48,22 +49,23 @@ export const useAddress = (): IUseAddressReturns => {
               ],
             },
           });
-          return {
+          setNotification({
             type: "success",
             title: "Address Added Successfully",
-          };
+            path: "/profile/address",
+          });
         } else if (!data.success) {
-          return {
+          setNotification({
             type: "error",
             title: "Error while Adding the data",
             description: data.message,
-          };
+          });
         }
       } catch (error) {
-        return {
+        setNotification({
           type: "error",
           title: "unexpected error occured",
-        };
+        });
       }
     },
     markAsPrimary: async (addressId) => {

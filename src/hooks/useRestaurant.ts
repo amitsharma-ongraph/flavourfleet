@@ -5,15 +5,14 @@ import { useImageUpload } from "./useImageUpload";
 import { useNotification } from "./useNotification";
 import { useRestroStore } from "./useRestroStore";
 import { useMaps } from "./useMaps";
+import { Address } from "../../packages/types/entity/Address";
+import { useUser } from "./useUser";
+import { useRouter } from "next/router";
 
 interface INewRestaurant {
   name: string;
-  addressLine: string;
-  city: string;
-  country: string;
-  zipCode: string;
   imageFile: File | null;
-  ownerId: string;
+  address: Address | null;
 }
 
 interface IMenuItemRequest {
@@ -31,9 +30,12 @@ interface IUseRestaurantReturns {
   addMenuItem: (menuItem: IMenuItemRequest) => Promise<Notification | void>;
   signUp: (restaurant: INewRestaurant) => void;
   resubmit: () => void;
+  addOutlet: (address: Address) => Promise<void>;
 }
 
 export const useRestaurant = (): IUseRestaurantReturns => {
+  const { user, authenticate } = useUser();
+  const { push } = useRouter();
   const { uploadRestroLogo, uploadMenuItemImage } = useImageUpload();
   const { setNotification } = useNotification();
   const { state, dispatch } = useRestroStore();
@@ -135,6 +137,15 @@ export const useRestaurant = (): IUseRestaurantReturns => {
 
     addMenuItem: async (menuItem) => {
       try {
+        if (!user?.id) {
+          push("/login");
+          setNotification({
+            type: "error",
+            title: "Please Login",
+          });
+          return;
+        }
+
         if (!restaurant) {
           return {
             type: "error",
@@ -211,15 +222,16 @@ export const useRestaurant = (): IUseRestaurantReturns => {
     },
     signUp: async (restaurant) => {
       try {
-        const {
-          name,
-          addressLine,
-          city,
-          country,
-          zipCode,
-          imageFile,
-          ownerId,
-        } = restaurant;
+        if (!user?.id) {
+          push("/login");
+          setNotification({
+            type: "error",
+            title: "Please Login",
+          });
+          return;
+        }
+
+        const { name, address, imageFile } = restaurant;
         if (!imageFile) {
           setNotification({
             type: "error",
@@ -227,20 +239,14 @@ export const useRestaurant = (): IUseRestaurantReturns => {
           });
           return;
         }
-        const coordinatesResult = await getCoordinates({
-          addressLine1: addressLine,
-          city,
-          country,
-          pincode: zipCode,
-        });
-        if (!coordinatesResult.success) {
+
+        if (!address) {
           setNotification({
             type: "error",
-            title: coordinatesResult.message || "",
+            title: "Please add an address first",
           });
           return;
         }
-        const { lon: longitude, lat: latitude } = coordinatesResult;
 
         const url = await uploadRestroLogo(imageFile);
         if (!url) {
@@ -252,14 +258,9 @@ export const useRestaurant = (): IUseRestaurantReturns => {
 
         const res = await axios.post("/restaurant/signup", {
           name,
-          addressLine,
-          city,
-          country,
-          zipCode,
+          ...address,
           logoUrl: url,
-          ownerId,
-          longitude,
-          latitude,
+          ownerId: user.id,
         });
         const { data } = res;
         if (data.success === true) {
@@ -297,6 +298,54 @@ export const useRestaurant = (): IUseRestaurantReturns => {
         setNotification({
           type: "error",
           title: "Can'nt resbumit application at this moment",
+        });
+      }
+    },
+    addOutlet: async (address) => {
+      try {
+        if (!user?.id || !state.restaurant) {
+          push("/login");
+          setNotification({
+            type: "error",
+            title: "Please Login",
+          });
+          return;
+        }
+        const res = await axios.post("/restaurant/add-outlet", {
+          id: state.restaurant._id,
+          address: {
+            ...address,
+          },
+        });
+        const { data } = res;
+
+        if (data.success) {
+          dispatch({
+            type: "setRestaurant",
+            data: {
+              ...state.restaurant.outlets,
+              outlets: [
+                ...state.restaurant.outlets,
+                { ...address, _id: data.addressId },
+              ],
+            },
+          });
+          setNotification({
+            type: "success",
+            title: "Outlet Added Successfully",
+            path: "/restaurant/dashboard/outlets",
+          });
+        } else if (!data.success) {
+          setNotification({
+            type: "error",
+            title: "Error while Adding the data",
+            description: data.message,
+          });
+        }
+      } catch (error) {
+        setNotification({
+          type: "error",
+          title: "unexpected error occured",
         });
       }
     },

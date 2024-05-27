@@ -1,15 +1,16 @@
 import AddAddressMap from "@/components/Map/AddAddressMap";
 import { useAddress } from "@/hooks/useAddress";
+import { useRestaurant } from "@/hooks/useRestaurant";
 import { Box } from "@chakra-ui/react";
 import React from "react";
 
-function AddAddressPage() {
-  const { addAddress } = useAddress();
+function AddOutletPage() {
+  const { addOutlet } = useRestaurant();
   return (
     <Box h={"100vh"} w={"100vw"} overflow={"hidden"}>
-      <AddAddressMap handleAddAddress={addAddress} />
+      <AddAddressMap handleAddAddress={addOutlet} />
     </Box>
   );
 }
 
-export default AddAddressPage;
+export default AddOutletPage;

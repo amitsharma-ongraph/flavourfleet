@@ -1,21 +1,16 @@
 // components/Map.tsx
-import { useEffect, useRef, useState } from "react";
+import { FC, useEffect, useRef, useState } from "react";
 import maplibre, { Map as MapLibreMap, Marker } from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
 import MarkerAddress from "./MarkerAddress";
-import { FaSearch } from "react-icons/fa";
-import {
-  Box,
-  Flex,
-  Icon,
-  Input,
-  InputGroup,
-  InputLeftElement,
-  Text,
-} from "@chakra-ui/react";
+import { Box, Flex, Icon, Text } from "@chakra-ui/react";
 import { CiGps } from "react-icons/ci";
+import MapSearchBar from "./MapSearchBar";
+import { Address } from "../../../packages/types/entity/Address";
 
-const AddAddressMap = () => {
+const AddAddressMap: FC<{
+  handleAddAddress: (address: Address) => Promise<void>;
+}> = ({ handleAddAddress }) => {
   const mapContainer = useRef<HTMLDivElement | null>(null);
   const centerMarker = useRef<Marker | null>(null);
   const [map, setMap] = useState<MapLibreMap | null>(null);
@@ -25,17 +20,26 @@ const AddAddressMap = () => {
   const [userLocation, setUserLocation] = useState<[number, number] | null>(
     null
   );
-  const [redirectCoords, setRedirectCoords] = useState<[number, number] | null>(
-    null
-  );
+
+  const handleAutoComplete = (lon: number, lat: number) => {
+    if (!map) return;
+    map.easeTo({
+      center: [lon, lat],
+      zoom: 17,
+      duration: 2000,
+    });
+    setCenterCoordinate([lon, lat]);
+    if (centerMarker.current) {
+      centerMarker.current.setLngLat([lon, lat]);
+    }
+  };
 
   useEffect(() => {
     if (!mapContainer.current) return;
     const initializeMap = () => {
       const mapInstance = new maplibre.Map({
         container: mapContainer.current!,
-        style:
-          "https://api.maptiler.com/maps/streets-v2/style.json?key=LhXLLEQ6L5AYI7Ai0xdy",
+        style: `https://api.maptiler.com/maps/streets-v2/style.json?key=${process.env.NEXT_PUBLIC_MAPLIBRE_API_KEY}`,
         center: [0, 0],
         zoom: 17,
       });
@@ -120,19 +124,14 @@ const AddAddressMap = () => {
         top={4}
         left="50%"
         transform="translateX(-50%)"
-        background="white"
         padding={2}
         borderRadius="md"
-        boxShadow="md"
         zIndex="10"
+        width={"100vw"}
+        justifyContent={"center"}
+        alignItems={"center"}
       >
-        <InputGroup>
-          <InputLeftElement
-            pointerEvents="none"
-            children={<FaSearch color="gray.300" />}
-          />
-          <Input type="text" placeholder="Search location..." />
-        </InputGroup>
+        <MapSearchBar handleClick={handleAutoComplete} />
       </Flex>
       <Box
         ref={mapContainer}
@@ -153,6 +152,7 @@ const AddAddressMap = () => {
           alignItems={"center"}
           rowGap={4}
           flexDirection={"column"}
+          pointerEvents={"none"}
         >
           <Flex
             h={"40px"}
@@ -166,11 +166,15 @@ const AddAddressMap = () => {
             cursor={"pointer"}
             fontWeight={600}
             onClick={handleCurrentLocation}
+            pointerEvents={"all"}
           >
             <Icon as={CiGps} fontSize={"1.2em"}></Icon>
             <Text>Use My Current Location</Text>
           </Flex>
-          <MarkerAddress coordinates={centerCoordinate} />
+          <MarkerAddress
+            coordinates={centerCoordinate}
+            handleAddAddress={handleAddAddress}
+          />
         </Flex>
       )}
     </Box>
