@@ -9,7 +9,6 @@ import {
   Image,
 } from "@chakra-ui/react";
 import { RiErrorWarningLine } from "react-icons/ri";
-import Link from "next/link";
 import axios from "axios";
 import { GetServerSideProps } from "next";
 
@@ -24,10 +23,11 @@ interface Props {
   restaurant: (Restaurant & { ownerId: User }) | null;
 }
 function RestaurantPage({ restaurant }: Props) {
+  const { resubmit } = useRestaurant();
   if (!restaurant) {
     return <>Error</>;
   }
-  const {resubmit}=useRestaurant();
+
   const { name, logoUrl } = restaurant;
   const {
     name: ownerName,
@@ -93,13 +93,10 @@ function RestaurantPage({ restaurant }: Props) {
               Application Rejected
             </Text>
             <Text>
-              Your restaurant application is rejected. Please{" "}
-              resubmit your
+              Your restaurant application is rejected. Please resubmit your
               application.
             </Text>
-            <Button onClick={resubmit}>
-              Resubmit
-            </Button>
+            <Button onClick={resubmit}>Resubmit</Button>
           </>
         );
       default:

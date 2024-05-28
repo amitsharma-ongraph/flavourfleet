@@ -28,7 +28,7 @@ const FullBillCard: FC<{
       <Flex
         flexDirection={"column"}
         w={"full"}
-        maxH={"150px"}
+        maxH={"180px"}
         overflowY={"scroll"}
       >
         {items.map((item, i) => (
@@ -134,7 +134,7 @@ const FullBillCard: FC<{
         color={"brand.900"}
       >
         <Text>TOTAL BILL</Text>
-        <Text>₹{bill.itemToatal + bill.gst}</Text>
+        <Text>₹{bill.toPay}</Text>
       </Flex>
     </Flex>
   );

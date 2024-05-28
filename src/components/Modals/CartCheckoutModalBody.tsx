@@ -46,6 +46,7 @@ function CartCheckoutModalBody() {
   const id = router.query.id as string;
   const cartItems = cart[id] || [];
   const menuItemList = cartItems.map((item) => item.menuItem);
+  const [billError, setBillError] = useState<string | null>(null);
 
   const handleNoteSave = () => {
     if (note === null || note === "") {
@@ -66,6 +67,7 @@ function CartCheckoutModalBody() {
       setBillLoading(true);
       (async () => {
         try {
+          setBillError(null);
           const res = await axios.post("/order/bill", {
             restaurantId: id,
             userAddress: address,
@@ -76,8 +78,18 @@ function CartCheckoutModalBody() {
               setBill(data.bill);
               setBillLoading(false);
             }, 1000);
+          } else {
+            setTimeout(() => {
+              setBill(null);
+              setBillLoading(false);
+              setBillError(data.message);
+            }, 1000);
           }
-        } catch (error) {}
+        } catch (error) {
+          setBill(null);
+          setBillLoading(false);
+          setBillError("Could'nt deliver to this Address");
+        }
       })();
     }
   }, [address, addressEdit, cartItems]);
@@ -253,8 +265,11 @@ function CartCheckoutModalBody() {
                       </Flex>
                     )}
                     {!billLoading && bill && <BillCard bill={bill} />}
+                    {!billLoading && billError && (
+                      <Text color={"red"}> {billError}</Text>
+                    )}
                   </Box>
-                  {!billLoading && (
+                  {!billLoading && !billError && (
                     <Flex
                       mt={3}
                       h={"30px"}

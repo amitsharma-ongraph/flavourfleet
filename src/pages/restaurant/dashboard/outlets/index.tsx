@@ -4,7 +4,6 @@ import React, { ReactElement, useEffect, useState } from "react";
 import { Restaurant } from "../../../../../packages/types/entity/Restaurant";
 import { Box, Flex, Grid, Heading, Icon, Text } from "@chakra-ui/react";
 import { BiPlusCircle } from "react-icons/bi";
-import Map from "@/components/Map/MapLibreMap";
 import { useRouter } from "next/router";
 import OutletMap from "@/components/Map/OutletMap";
 
@@ -124,7 +123,7 @@ function RestroOutletsPage() {
               </Flex>
             ))}
           </Flex>
-          <Box h="full" w="full" bg="blue">
+          <Box h="full" w="full">
             <OutletMap outlets={outlets} selectedCoordinates={coordinates} />
           </Box>
         </Grid>

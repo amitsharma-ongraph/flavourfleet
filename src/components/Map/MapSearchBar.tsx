@@ -83,10 +83,11 @@ const MapSearchBar: FC<{
         boxShadow={"md"}
         borderWidth={"1px"}
       >
-        <InputLeftElement
-          pointerEvents="none"
-          children={<BiSearch color="brand.200" />}
-        />
+        <InputLeftElement pointerEvents="none">
+          <BiSearch color="brand.200" />
+        </InputLeftElement>
+        <BiSearch color="brand.200" />
+
         <Input
           variant="filled"
           placeholder="Search for Cusins , Dishes or Restaurants"

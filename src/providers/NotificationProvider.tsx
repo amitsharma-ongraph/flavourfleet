@@ -20,6 +20,7 @@ var timeout: Maybe<NodeJS.Timeout>;
 export const NotificationProvider: FC<PropsWithChildren> = ({ children }) => {
   const [notification, setNotification] =
     useState<Nullable<Notification>>(null);
+  const colorValue = useColorModeValue("lg", "md-dark");
 
   useEffect(() => {
     if (notification) {
@@ -57,7 +58,7 @@ export const NotificationProvider: FC<PropsWithChildren> = ({ children }) => {
               <Flex
                 direction={{ base: "column", sm: "row" }}
                 width={{ base: "full", sm: "md" }}
-                boxShadow={useColorModeValue("lg", "md-dark")}
+                boxShadow={colorValue}
                 bgColor="white"
                 borderRadius="sm"
                 overflow="hidden"

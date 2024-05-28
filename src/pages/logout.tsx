@@ -1,7 +1,7 @@
 import { useUser } from "@/hooks/useUser";
 import React, { useEffect } from "react";
 
-function logout() {
+function Logout() {
   const { logOut } = useUser();
   useEffect(() => {
     logOut();
@@ -9,4 +9,4 @@ function logout() {
   return <></>;
 }
 
-export default logout;
+export default Logout;

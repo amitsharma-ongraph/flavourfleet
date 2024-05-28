@@ -103,10 +103,10 @@ function SearchBar() {
       id="searchBar"
     >
       <InputGroup>
-        <InputLeftElement
-          pointerEvents="none"
-          children={<BiSearch color="brand.200" />}
-        />
+        <InputLeftElement pointerEvents="none">
+          <BiSearch color="brand.200" />
+        </InputLeftElement>
+
         <Input
           variant="filled"
           placeholder="Search for Cusins , Dishes or Restaurants"
@@ -182,7 +182,7 @@ function SearchBar() {
                     {option.value}
                   </Text>
                   <Text fontSize={"0.8em"} color={"brand.900"}>
-                    Search in "{option.matchField}"
+                    {` Search in "${option.matchField}"`}
                   </Text>
                 </Flex>
               </Flex>

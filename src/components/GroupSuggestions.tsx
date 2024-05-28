@@ -17,7 +17,7 @@ function GroupSuggestions() {
     (async () => {
       setSuggestions(await getGroupSuggestions());
     })();
-  }, []);
+  }, [getGroupSuggestions]);
 
   return (
     <Grid gridTemplateRows={"20px auto"} h={"300px"} w={"full"} mt={5} p={5}>
@@ -54,7 +54,12 @@ function GroupSuggestions() {
                   borderRadius={"50%"}
                 >
                   {" "}
-                  <Image h={"full"} w={"full"} src={suggestion.imageUrl} />
+                  <Image
+                    h={"full"}
+                    w={"full"}
+                    src={suggestion.imageUrl}
+                    alt="suggestion"
+                  />
                 </Box>
               </Flex>
               <Flex justifyContent={"center"} alignItems={"center"}>

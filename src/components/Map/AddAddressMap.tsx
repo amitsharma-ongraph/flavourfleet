@@ -102,7 +102,7 @@ const AddAddressMap: FC<{
     });
 
     new Marker({ color: "blue" }).setLngLat(userLocation).addTo(map);
-  }, [userLocation]);
+  }, [userLocation, map]);
 
   const handleCurrentLocation = () => {
     if (map && userLocation) {
