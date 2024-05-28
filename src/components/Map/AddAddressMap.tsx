@@ -1,4 +1,3 @@
-// components/Map.tsx
 import { FC, useEffect, useRef, useState } from "react";
 import maplibre, { Map as MapLibreMap, Marker } from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
