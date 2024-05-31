@@ -46,7 +46,10 @@ export const useUser = (): IUseUserReturns => {
     },
 
     continueWithGoogle: () => {
-      window.open("http://localhost:5000/api/auth/google", "_self");
+      window.open(
+        `${process.env.NEXT_PUBLIC_BASE_API_URL}/auth/google`,
+        "_self"
+      );
     },
 
     logOut: async () => {
