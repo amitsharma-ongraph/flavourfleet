@@ -3,6 +3,7 @@ import { useUser } from "@/hooks/useUser";
 import { Avatar, Box, Button, Flex, Text } from "@chakra-ui/react";
 import axios, { AxiosResponse } from "axios";
 import { GetServerSideProps } from "next";
+
 import React, { ReactElement } from "react";
 
 function ProfilePage() {
@@ -69,6 +70,8 @@ export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   };
 
   const { req } = context;
+
+  console.log("context cookies--->", req.headers.cookie);
 
   try {
     const res: AxiosResponse = await axios.get(
