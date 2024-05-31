@@ -1,7 +1,7 @@
 import { ProfileDashboardLayout } from "@/components/layouts/ProfileDashboardLayout";
 import { useUser } from "@/hooks/useUser";
 import { Avatar, Box, Button, Flex, Text } from "@chakra-ui/react";
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 import { GetServerSideProps } from "next";
 import React, { ReactElement } from "react";
 
@@ -69,8 +69,9 @@ export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   };
 
   const { req } = context;
+
   try {
-    const res = await axios.get(
+    const res: AxiosResponse = await axios.get(
       process.env.BASE_API_URL + "/auth/authenticate",
       {
         withCredentials: true,
@@ -79,6 +80,7 @@ export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
         },
       }
     );
+    console.log("respones received -->", res.config.headers);
     const data = await res.data;
     if (!data.success) {
       return logInRedirect;
