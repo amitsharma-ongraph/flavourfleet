@@ -74,16 +74,12 @@ function CartCheckoutModalBody() {
           });
           const { data } = res;
           if (data.success) {
-            setTimeout(() => {
-              setBill(data.bill);
-              setBillLoading(false);
-            }, 1000);
+            setBill(data.bill);
+            setBillLoading(false);
           } else {
-            setTimeout(() => {
-              setBill(null);
-              setBillLoading(false);
-              setBillError(data.message);
-            }, 1000);
+            setBill(null);
+            setBillLoading(false);
+            setBillError(data.message);
           }
         } catch (error) {
           setBill(null);
@@ -96,12 +92,10 @@ function CartCheckoutModalBody() {
 
   const handleOrder = async () => {
     setOrderLoading(true);
-
-    setTimeout(async () => {
-      setNotification(await placeOrder(id, address?._id, note));
-      setOrderLoading(false);
-      setModal(null);
-    }, 1000);
+    if (!bill) return;
+    setNotification(await placeOrder(id, address?._id, note, bill.toPay));
+    setOrderLoading(false);
+    setModal(null);
   };
 
   return (

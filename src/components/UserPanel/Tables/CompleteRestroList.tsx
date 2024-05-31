@@ -33,19 +33,13 @@ const CompleteRestroList: FC<CompleteRestroListProps> = ({
         const { data } = res;
         if (data.success) {
           if (data.allRestaurants.length === 0) {
-            setTimeout(() => {
-              setLoading(false);
-            }, 2000);
+            setLoading(false);
           } else {
-            setTimeout(() => {
-              setRestaurants(data.allRestaurants);
-            }, 1500);
+            setRestaurants(data.allRestaurants);
           }
         }
       } catch (error) {
-        setTimeout(() => {
-          setLoading(false);
-        }, 1500);
+        setLoading(false);
       }
     })();
   }, [fetchUrl]);

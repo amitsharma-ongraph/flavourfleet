@@ -37,9 +37,8 @@ const MarkerAddress: FC<{
         country: data.address.country,
         zipCode: data.address.postcode,
       });
-      setTimeout(() => {
-        setLoading(false);
-      }, 1500);
+
+      setLoading(false);
     })();
   }, [coordinates]);
   return (

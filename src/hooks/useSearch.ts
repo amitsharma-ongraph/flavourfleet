@@ -10,16 +10,15 @@ interface IUseSearchReturns {
 const useSearch = (): IUseSearchReturns => {
   let cancleTokenSource: CancelTokenSource | null = null;
 
-  const getGroupSuggestions = async () => {
-    const res = await axios.get("/search/group-suggestion");
-    const { data } = res;
-    if (data.success === true) {
-      return data.groups;
-    }
-    return [];
-  };
   return {
-    getGroupSuggestions,
+    getGroupSuggestions: async () => {
+      const res = await axios.get("/search/group-suggestion");
+      const { data } = res;
+      if (data.success === true) {
+        return data.groups;
+      }
+      return [];
+    },
     getSearchOptions: async (keyword) => {
       if (cancleTokenSource) {
         cancleTokenSource.cancel("");

@@ -72,12 +72,10 @@ export const RestroStoreProvider: FC<PropsWithChildren> = ({ children }) => {
             },
           });
 
-          setTimeout(() => {
-            dispatch({
-              type: "setRestroLoading",
-              data: false,
-            });
-          }, 2000);
+          dispatch({
+            type: "setRestroLoading",
+            data: false,
+          });
         }
       } catch (error) {}
     })();

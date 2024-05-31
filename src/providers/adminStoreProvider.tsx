@@ -39,12 +39,10 @@ export const AdminStoreProvider: FC<PropsWithChildren> = ({ children }) => {
             data: [...data.restroList],
           });
 
-          setTimeout(() => {
-            dispatch({
-              type: "setAdminLoading",
-              data: false,
-            });
-          }, 2000);
+          dispatch({
+            type: "setAdminLoading",
+            data: false,
+          });
         }
       } catch (error) {}
     })();

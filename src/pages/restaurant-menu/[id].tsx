@@ -41,13 +41,9 @@ function RestaurantMenuPage() {
         const res = await axios.get(`/search/restro-menu/${id}`);
         const { data } = res;
         if (data.success) {
-          setTimeout(() => {
-            setRestaurant(data.restaurant);
-          }, 1500);
+          setRestaurant(data.restaurant);
         } else {
-          setTimeout(() => {
-            setLoading(false);
-          }, 2000);
+          setLoading(false);
         }
       } catch (error) {}
     })();

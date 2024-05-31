@@ -70,7 +70,7 @@ const UserPOrderCard: FC<{ order: IUserPOrder }> = ({ order }) => {
           <DeliveryAddressCard address={userAddress} />
         </Flex>
       </Flex>
-      <StatusCard status={status} />
+      <StatusCard status={status} id={id} />
     </Flex>
   );
 };

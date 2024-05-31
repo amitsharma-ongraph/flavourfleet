@@ -36,7 +36,7 @@ const UserPanleRestroCard: FC<Props> = ({ restaurant }) => {
           position={"absolute"}
           bottom={0}
         />
-        <Flex
+        {/* <Flex
           position={"absolute"}
           right={"10px"}
           top={"10px"}
@@ -48,7 +48,7 @@ const UserPanleRestroCard: FC<Props> = ({ restaurant }) => {
           alignItems={"center"}
         >
           <Icon as={BiHeart}></Icon>
-        </Flex>
+        </Flex> */}
       </Box>
       <Flex
         flexDirection={"column"}

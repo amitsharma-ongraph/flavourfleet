@@ -1,4 +1,3 @@
-import RestroPOrdersList from "@/components/RestaurantPanel/RestroPOrdersList";
 import OrdersList from "@/components/UserPanel/Tables/OrdersList";
 import { ProfileDashboardLayout } from "@/components/layouts/ProfileDashboardLayout";
 import { useStore } from "@/hooks/useStore";

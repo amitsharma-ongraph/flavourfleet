@@ -25,9 +25,8 @@ export const NotificationProvider: FC<PropsWithChildren> = ({ children }) => {
   useEffect(() => {
     if (notification) {
       if (timeout) clearTimeout(timeout);
-      timeout = setTimeout(() => {
-        setNotification(null);
-      }, 5000);
+
+      setNotification(null);
     }
   }, [notification]);
 

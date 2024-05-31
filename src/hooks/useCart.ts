@@ -44,15 +44,13 @@ export const useCart = (): IUseCartReturns => {
           },
         });
 
-        setTimeout(() => {
-          dispatch({
-            type: "setLoadingState",
-            data: {
-              formLoading: false,
-              appLoading: false,
-            },
-          });
-        }, 1200);
+        dispatch({
+          type: "setLoadingState",
+          data: {
+            formLoading: false,
+            appLoading: false,
+          },
+        });
       } catch (error) {
         setNotification({
           type: "error",
@@ -87,15 +85,14 @@ export const useCart = (): IUseCartReturns => {
             menuItemId,
           },
         });
-        setTimeout(() => {
-          dispatch({
-            type: "setLoadingState",
-            data: {
-              formLoading: false,
-              appLoading: false,
-            },
-          });
-        }, 1200);
+
+        dispatch({
+          type: "setLoadingState",
+          data: {
+            formLoading: false,
+            appLoading: false,
+          },
+        });
       } catch (error) {
         setNotification({
           type: "error",

@@ -17,7 +17,7 @@ function GroupSuggestions() {
     (async () => {
       setSuggestions(await getGroupSuggestions());
     })();
-  }, [getGroupSuggestions]);
+  }, []);
 
   return (
     <Grid gridTemplateRows={"20px auto"} h={"300px"} w={"full"} mt={5} p={5}>
