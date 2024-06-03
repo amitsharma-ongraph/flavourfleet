@@ -7,6 +7,7 @@ import {
   Text,
   CloseButton,
   useColorModeValue,
+  Box,
 } from "@chakra-ui/react";
 import { FiCheckCircle, FiXCircle } from "react-icons/fi";
 import { AnimatePresence, motion } from "framer-motion";
@@ -25,9 +26,15 @@ export const NotificationProvider: FC<PropsWithChildren> = ({ children }) => {
   useEffect(() => {
     if (notification) {
       if (timeout) clearTimeout(timeout);
-
-      setNotification(null);
+      timeout = setTimeout(() => {
+        setNotification(null);
+        console.log("notification cleared");
+      }, 5000);
     }
+
+    return () => {
+      if (timeout) clearTimeout(timeout);
+    };
   }, [notification]);
 
   return (
@@ -49,7 +56,7 @@ export const NotificationProvider: FC<PropsWithChildren> = ({ children }) => {
             }}
             style={{
               position: "fixed",
-              zIndex: 99,
+              zIndex: 9900,
               pointerEvents: "none",
             }}
           >

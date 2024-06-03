@@ -25,11 +25,20 @@ const CompleteRestroList: FC<CompleteRestroListProps> = ({
   const [loading, setLoading] = useState<boolean>(true);
   const [restaurants, setRestaurants] = useState<UserPanelRestro[]>([]);
 
+  const getFetchParams = () => {
+    const queryString = filters.reduce((q, key, index) => {
+      return index > 0 ? q + `&${key}=true` : q + `${key}=true`;
+    }, "?");
+    return queryString;
+  };
+
   useEffect(() => {
     setLoading(true);
     (async () => {
       try {
-        const res = await axios.get(fetchUrl);
+        const fetchParam = getFetchParams();
+
+        const res = await axios.get(fetchUrl + fetchParam);
         const { data } = res;
         if (data.success) {
           if (data.allRestaurants.length === 0) {
@@ -39,14 +48,18 @@ const CompleteRestroList: FC<CompleteRestroListProps> = ({
           }
         }
       } catch (error) {
-        setLoading(false);
+        setTimeout(() => {
+          setLoading(false);
+        }, 1000);
       }
     })();
-  }, [fetchUrl]);
+  }, [fetchUrl, filters]);
 
   useEffect(() => {
     if (restaurants.length > 0) {
-      setLoading(false);
+      setTimeout(() => {
+        setLoading(false);
+      }, 1000);
     }
   }, [restaurants]);
 
@@ -147,7 +160,7 @@ const CompleteRestroList: FC<CompleteRestroListProps> = ({
           </FilterOptionCont>
         </Flex>
       )}
-      {restaurants.length > 0 && (
+      {restaurants.length > 0 && !loading && (
         <>
           <Flex
             flexWrap={"wrap"}

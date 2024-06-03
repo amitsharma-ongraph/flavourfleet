@@ -4,4 +4,5 @@ export interface UserPanelRestro {
   ratings: string;
   logoUrl: string;
   tags: [string];
+  isVeg?:boolean;
 }

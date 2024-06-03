@@ -11,4 +11,5 @@ export interface Restaurant {
   logoUrl: string;
   status: "Approved" | "Pending" | "Rejected";
   menuGroups: string[];
+  isVeg?:boolean
 }

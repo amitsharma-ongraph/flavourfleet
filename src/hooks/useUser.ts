@@ -5,10 +5,19 @@ import { axios } from "../../packages/axios";
 import { useNotification } from "./useNotification";
 import { useAuth } from "./useAuth";
 
+interface ISignUpCredentials {
+  name: string;
+  email: string;
+  contactNo: string;
+  password: string;
+  confirmPassword: string;
+}
+
 interface IUseUserReturns {
   user: User | null | undefined;
   userLoaded: boolean;
-  logInWithEmailPassword: (email: string, password: string) => void;
+  logInWithEmailPassword: (email: string, password: string) => Promise<void>;
+  signUpWithEmailPassword: (credentials: ISignUpCredentials) => Promise<void>;
   logOut: () => void;
   continueWithGoogle: () => void;
   authenticate: () => void;
@@ -39,9 +48,59 @@ export const useUser = (): IUseUserReturns => {
             title: "Login succesfull",
             path: "/",
           });
+        } else {
+          setNotification({
+            type: "error",
+            title: data.message,
+          });
         }
       } catch (error) {
         console.error("Error logging in:", error);
+      }
+    },
+    signUpWithEmailPassword: async (credentials) => {
+      const { name, email, contactNo, password, confirmPassword } = credentials;
+      if (!name || !email || !contactNo || !password || !confirmPassword) {
+        setNotification({
+          type: "error",
+          title: "missing credentials",
+        });
+        return;
+      }
+      if (password !== confirmPassword) {
+        setNotification({
+          type: "error",
+          title: "Passwords does't match",
+        });
+        return;
+      }
+      try {
+        const res = await axios.post("/auth/signup", {
+          name,
+          email,
+          contactNo,
+          password,
+        });
+        const { data } = res;
+        if (data.success) {
+          setNotification({
+            type: "success",
+            title: "SignUp Successfull",
+            path: "/login",
+          });
+          return;
+        } else {
+          setNotification({
+            type: "error",
+            title: data.message,
+          });
+          return;
+        }
+      } catch (error) {
+        setNotification({
+          type: "error",
+          title: "Error while singing up",
+        });
       }
     },
 

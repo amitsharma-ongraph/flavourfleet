@@ -14,7 +14,7 @@ const UserPanleRestroCard: FC<Props> = ({ restaurant }) => {
     <Grid
       flex={1}
       minWidth={"300px"}
-      maxWidth={"33%"}
+      maxWidth={{ base: "full", md: "50%", lg: "33%" }}
       h={"280px"}
       boxShadow={"lg"}
       border={"solid"}
