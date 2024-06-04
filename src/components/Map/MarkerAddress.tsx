@@ -89,8 +89,9 @@ const MarkerAddress: FC<{
                 if (address)
                   await handleAddAddress({
                     ...address,
-                    longitude: coordinates[0].toString(),
-                    latitude: coordinates[1].toString(),
+                    location:{
+                      coordinates:[coordinates[0].toString(),coordinates[1].toString()]
+                    },
                   });
               }}
             >

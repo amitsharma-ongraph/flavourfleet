@@ -20,19 +20,19 @@ function RestroOutletsPage() {
     latitude: string;
   } | null>(null);
 
+  
+
   useEffect(() => {
     const outlet = outlets.find((out) => out._id === selectedOutlet);
-    if (outlet && outlet.longitude && outlet.latitude) {
+    if (outlet && outlet.location) {
       setCoordinates({
-        longitude: outlet.longitude,
-        latitude: outlet.latitude,
+        longitude: outlet.location.coordinates[0],
+        latitude: outlet.location.coordinates[1],
       });
     }
   }, [selectedOutlet]);
 
-  useEffect(() => {
-    console.log(coordinates);
-  }, [coordinates]);
+
 
   if (!restaurant) {
     return <></>;

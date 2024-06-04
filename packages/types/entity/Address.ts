@@ -5,6 +5,5 @@ export interface Address {
   zipCode: string;
   isPrimary?: boolean;
   _id?: string;
-  longitude?: string;
-  latitude?: string;
+  location?:any
 }

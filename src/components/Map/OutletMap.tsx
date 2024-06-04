@@ -19,7 +19,8 @@ const OutletMap: FC<{
 
     const getInitialCoords = (): LngLatLike | undefined => {
       if (!outlets[0]) return [0, 0];
-      const { longitude, latitude } = outlets[0];
+      const longitude=outlets[0].location.coordinates[0]
+      const latitude=outlets[0].location.coordinates[1];
       if (!longitude || !latitude) return [0, 0];
       const lon = parseFloat(longitude);
       const lat = parseFloat(latitude);
@@ -48,7 +49,8 @@ const OutletMap: FC<{
   useEffect(() => {
     if (!map) return;
     outlets.forEach((outlet) => {
-      const { longitude, latitude } = outlet;
+      const longitude=outlet.location.coordinates[0];
+      const latitude=outlet.location.coordinates[1];
       if (longitude && latitude) {
         new Marker()
           .setLngLat([parseFloat(longitude), parseFloat(latitude)])

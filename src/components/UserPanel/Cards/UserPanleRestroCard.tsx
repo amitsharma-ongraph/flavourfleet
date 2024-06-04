@@ -10,6 +10,7 @@ interface Props {
 
 const UserPanleRestroCard: FC<Props> = ({ restaurant }) => {
   const { push } = useRouter();
+  const { distance } = restaurant;
   return (
     <Grid
       flex={1}
@@ -81,9 +82,11 @@ const UserPanleRestroCard: FC<Props> = ({ restaurant }) => {
               borderRadius={"5px"}
               bg={"brand.900"}
             ></Box>
-            <Text fontSize={"0.8em"} color={"brand.900"}>
-              2.5km
-            </Text>
+            {distance && (
+              <Text fontSize={"0.8em"} color={"brand.900"}>
+                {parseFloat((distance / 1000).toFixed(1))} km
+              </Text>
+            )}
             <Text fontSize={"0.8em"} color={"brand.900"}>
               40 minutes
             </Text>

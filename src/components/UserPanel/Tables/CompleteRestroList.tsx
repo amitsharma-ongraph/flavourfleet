@@ -7,6 +7,7 @@ import RestroPlaceholderList from "../../placeholders/RestroPlaceholderList";
 import { axios } from "../../../../packages/axios";
 import { UserPanelRestro } from "../../../../packages/types/entity/UserPanelRestro";
 import UserPanleRestroCard from "../Cards/UserPanleRestroCard";
+import { useStore } from "@/hooks/useStore";
 
 interface CompleteRestroListProps {
   title: string;
@@ -21,14 +22,24 @@ const CompleteRestroList: FC<CompleteRestroListProps> = ({
   title,
   fetchUrl,
 }) => {
+  const {
+    state: { user },
+  } = useStore();
+  let longitude: string = "";
+  let latitude: string = "";
+  try {
+    longitude = user?.addressList[0].location.coordinates[0];
+    latitude = user?.addressList[0].location.coordinates[1];
+  } catch (error) {}
+
   const [filters, setFilters] = useState<string[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [restaurants, setRestaurants] = useState<UserPanelRestro[]>([]);
 
   const getFetchParams = () => {
-    const queryString = filters.reduce((q, key, index) => {
-      return index > 0 ? q + `&${key}=true` : q + `${key}=true`;
-    }, "?");
+    const queryString = filters.reduce((q, key) => {
+      return q + `&${key}=true`;
+    }, "");
     return queryString;
   };
 
@@ -38,14 +49,15 @@ const CompleteRestroList: FC<CompleteRestroListProps> = ({
       try {
         const fetchParam = getFetchParams();
 
-        const res = await axios.get(fetchUrl + fetchParam);
+        const res = await axios.get(
+          fetchUrl + `?longitude=${longitude}&latitude=${latitude}` + fetchParam
+        );
         const { data } = res;
         if (data.success) {
           if (data.allRestaurants.length === 0) {
             setLoading(false);
-          } else {
-            setRestaurants(data.allRestaurants);
           }
+          setRestaurants(data.allRestaurants);
         }
       } catch (error) {
         setTimeout(() => {
@@ -53,7 +65,7 @@ const CompleteRestroList: FC<CompleteRestroListProps> = ({
         }, 1000);
       }
     })();
-  }, [fetchUrl, filters]);
+  }, [fetchUrl, filters, longitude, latitude]);
 
   useEffect(() => {
     if (restaurants.length > 0) {
@@ -128,38 +140,38 @@ const CompleteRestroList: FC<CompleteRestroListProps> = ({
           <Box w={"full"} h={"2px"} bg={"brand.100"}></Box>
         </Flex>
       </Grid>
-      {(loading || restaurants.length > 0) && (
-        <Flex
-          direction={"row"}
-          h={"40px"}
-          alignItems={"center"}
-          px={4}
-          columnGap={2.5}
-          overflowX={"scroll"}
-          mt={2.5}
-        >
-          <FilterOptionCont value="sort">
-            <Icon as={BiSort} color={"brand.900"}></Icon>
-            <Text color={"brand.900"}>Sort</Text>
-            <Icon as={RiArrowDownCircleFill} color={"brand.900"}></Icon>
-          </FilterOptionCont>
-          <FilterOptionCont value="nearest">
-            <Text color={"brand.900"}>Nearest and Fast</Text>
-          </FilterOptionCont>
-          <FilterOptionCont value="offers">
-            <Text color={"brand.900"}>Great Offers</Text>
-          </FilterOptionCont>
-          <FilterOptionCont value="veg">
-            <Text color={"brand.900"}>Veg Only</Text>
-          </FilterOptionCont>
-          <FilterOptionCont value="rating">
-            <Text color={"brand.900"}>Rating 4.0+</Text>
-          </FilterOptionCont>
-          <FilterOptionCont value="ordered">
-            <Text color={"brand.900"}>Previously Ordered</Text>
-          </FilterOptionCont>
-        </Flex>
-      )}
+
+      <Flex
+        direction={"row"}
+        h={"40px"}
+        alignItems={"center"}
+        px={4}
+        columnGap={2.5}
+        overflowX={"scroll"}
+        mt={2.5}
+      >
+        <FilterOptionCont value="sort">
+          <Icon as={BiSort} color={"brand.900"}></Icon>
+          <Text color={"brand.900"}>Sort</Text>
+          <Icon as={RiArrowDownCircleFill} color={"brand.900"}></Icon>
+        </FilterOptionCont>
+        <FilterOptionCont value="nearest">
+          <Text color={"brand.900"}>Nearest and Fast</Text>
+        </FilterOptionCont>
+        <FilterOptionCont value="offers">
+          <Text color={"brand.900"}>Great Offers</Text>
+        </FilterOptionCont>
+        <FilterOptionCont value="veg">
+          <Text color={"brand.900"}>Veg Only</Text>
+        </FilterOptionCont>
+        <FilterOptionCont value="rating">
+          <Text color={"brand.900"}>Rating 4.0+</Text>
+        </FilterOptionCont>
+        <FilterOptionCont value="ordered">
+          <Text color={"brand.900"}>Previously Ordered</Text>
+        </FilterOptionCont>
+      </Flex>
+
       {restaurants.length > 0 && !loading && (
         <>
           <Flex
