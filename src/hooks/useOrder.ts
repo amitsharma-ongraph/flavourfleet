@@ -72,7 +72,7 @@ export const useOrder = (): IUseOrderReturns => {
         });
         dispatch({
           type: "setOrders",
-          data: [...orders, data.order],
+          data: [data.order,...orders],
         });
         return {
           type: "success",

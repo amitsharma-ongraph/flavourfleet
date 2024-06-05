@@ -14,10 +14,14 @@ function RestroOrdersPage() {
     OrderStatus.Placed,
     OrderStatus.Accepted,
     OrderStatus.Preparing,
+    OrderStatus.Ready,
     OrderStatus.Out,
     OrderStatus.Delivered,
   ];
   const [activeFilter, setActiveFilter] = useState<string>(OrderStatus.Placed);
+  const getOrders=()=>{
+    return orders.filter(order=>order.status===activeFilter);
+  }
   return (
     <>
       <Flex
@@ -48,7 +52,7 @@ function RestroOrdersPage() {
           </Box>
         ))}
       </Flex>
-      <OrdersList orders={orders} />
+      <OrdersList orders={getOrders()} />
     </>
   );
 }

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { FormEvent, useState } from "react";
 import { Box, Button, Flex, Input, Link } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { useUser } from "@/hooks/useUser";
@@ -31,7 +31,14 @@ const LoginPage = () => {
           <Logo />
         </Box>
 
-        <Flex direction="column">
+        <Flex
+          direction="column"
+          as="form"
+          onSubmit={(e: FormEvent) => {
+            e.preventDefault();
+            logInWithEmailPassword(email, password);
+          }}
+        >
           <Input
             mb={4}
             placeholder="Email"
@@ -54,9 +61,7 @@ const LoginPage = () => {
               },
             }}
             color={"white"}
-            onClick={() => {
-              logInWithEmailPassword(email, password);
-            }}
+            type="submit"
           >
             Login
           </Button>

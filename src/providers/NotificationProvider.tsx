@@ -7,6 +7,7 @@ import {
   Text,
   CloseButton,
   useColorModeValue,
+  Box,
 } from "@chakra-ui/react";
 import { FiCheckCircle, FiXCircle } from "react-icons/fi";
 import { AnimatePresence, motion } from "framer-motion";
@@ -14,6 +15,8 @@ import { Maybe } from "../../packages/types/common/maybe";
 import { Nullable } from "../../packages/types/common/nullable";
 import { Notification } from "../../packages/types/common/Notification";
 import { NotificationContext } from "@/context/notficationContext";
+import { useRouter } from "next/navigation";
+
 
 var timeout: Maybe<NodeJS.Timeout>;
 
@@ -22,12 +25,20 @@ export const NotificationProvider: FC<PropsWithChildren> = ({ children }) => {
     useState<Nullable<Notification>>(null);
   const colorValue = useColorModeValue("lg", "md-dark");
 
+  const {push}=useRouter();
+
   useEffect(() => {
     if (notification) {
       if (timeout) clearTimeout(timeout);
-
-      setNotification(null);
+      timeout = setTimeout(() => {
+        setNotification(null);
+        console.log("notification cleared");
+      }, 5000);
     }
+
+    return () => {
+      if (timeout) clearTimeout(timeout);
+    };
   }, [notification]);
 
   return (
@@ -49,7 +60,7 @@ export const NotificationProvider: FC<PropsWithChildren> = ({ children }) => {
             }}
             style={{
               position: "fixed",
-              zIndex: 99,
+              zIndex: 9900,
               pointerEvents: "none",
             }}
           >
@@ -62,6 +73,13 @@ export const NotificationProvider: FC<PropsWithChildren> = ({ children }) => {
                 borderRadius="sm"
                 overflow="hidden"
                 pointerEvents="all"
+                cursor={"pointer"}
+                onClick={()=>{
+                  console.log("clicked on the notification",notification.link)
+                  if(notification&&notification.link){
+                    push(notification.link)
+                  }
+                }}
               >
                 <Center
                   display={{ base: "none", sm: "flex" }}

@@ -1,29 +1,26 @@
-import { useState } from "react";
-import { Button, Flex, Input, Link } from "@chakra-ui/react";
+import { FormEvent, useState } from "react";
+import { Box, Button, Flex, FormControl, Input, Link } from "@chakra-ui/react";
 import { useRouter } from "next/router";
+import { Logo } from "@/components/Logo";
+import { useUser } from "@/hooks/useUser";
 
 const SignupPage = () => {
   const router = useRouter();
   const [name, setName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
-  const [contactNo, setContactNo] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [confirmPassword, setConfirmPassword] = useState<string>("");
 
-  const handleSignup = async () => {
-    try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BASE_API_URL}/api/auth/signup`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ name, email, contactNo, password }),
-        }
-      );
-      const data = await response.json();
-    } catch (error) {}
+  const { signUpWithEmailPassword } = useUser();
+
+  const handleSignup = async (e: FormEvent) => {
+    e.preventDefault();
+    await signUpWithEmailPassword({
+      email,
+      name,
+      password,
+      confirmPassword,
+    });
   };
 
   const handleLogin = () => {
@@ -32,65 +29,82 @@ const SignupPage = () => {
 
   return (
     <Flex height="100vh" alignItems="center" justifyContent="center">
-      <Flex direction="column" p={8} rounded={6} boxShadow="md" bg="gray.100">
-        <Input
-          mb={4}
-          placeholder="Name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-        />
-        <Input
-          mb={4}
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        <Input
-          mb={4}
-          placeholder="Contact Number"
-          value={contactNo}
-          onChange={(e) => setContactNo(e.target.value)}
-        />
-        <Input
-          mb={4}
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        <Input
-          mb={4}
-          type="password"
-          placeholder="Confirm Password"
-          value={confirmPassword}
-          onChange={(e) => setConfirmPassword(e.target.value)}
-        />
-        <Button
-          bgColor={"brand.400"}
-          mb={4}
-          sx={{
-            ":hover": {
-              bgColor: "brand.600",
-            },
-          }}
-          color={"white"}
-          onClick={handleSignup}
+      <Flex
+        direction="column"
+        p={8}
+        rounded={6}
+        boxShadow="md"
+        bg="brand.50"
+        alignItems={"center"}
+        rowGap={4}
+      >
+        <Box
+          borderRight="1px solid"
+          borderRightColor="white"
+          w={"150px"}
+          h="50px"
         >
-          SignUp
-        </Button>
-        <Button
-          bgColor={"brand.400"}
-          mb={4}
-          sx={{
-            ":hover": {
-              bgColor: "brand.600",
-            },
-          }}
-          color={"white"}
-        >
-          Continue with Google
-        </Button>
-        <Link onClick={handleLogin}>Login</Link>
+          <Logo />
+        </Box>
+
+        <Flex direction="column" as="form" onSubmit={handleSignup}>
+          <FormControl isRequired={true}>
+            <Input
+              mb={4}
+              placeholder="Name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
+          </FormControl>
+          <Input
+            mb={4}
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+         
+          <Input
+            mb={4}
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          <Input
+            mb={4}
+            type="password"
+            placeholder="Confirm Password"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+          />
+          <Button
+            bgColor={"brand.400"}
+            mb={4}
+            sx={{
+              ":hover": {
+                bgColor: "brand.600",
+              },
+            }}
+            color={"white"}
+            type="submit"
+            onClick={handleSignup}
+          >
+            SignUp
+          </Button>
+          <Button
+            bgColor={"brand.400"}
+            mb={4}
+            sx={{
+              ":hover": {
+                bgColor: "brand.600",
+              },
+            }}
+            color={"white"}
+          >
+            Continue with Google
+          </Button>
+          <Link onClick={handleLogin}>Login</Link>
+        </Flex>
       </Flex>
     </Flex>
   );
