@@ -8,7 +8,6 @@ const SignupPage = () => {
   const router = useRouter();
   const [name, setName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
-  const [contactNo, setContactNo] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [confirmPassword, setConfirmPassword] = useState<string>("");
 
@@ -18,7 +17,6 @@ const SignupPage = () => {
     e.preventDefault();
     await signUpWithEmailPassword({
       email,
-      contactNo,
       name,
       password,
       confirmPassword,
@@ -64,12 +62,7 @@ const SignupPage = () => {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
-          <Input
-            mb={4}
-            placeholder="Contact Number"
-            value={contactNo}
-            onChange={(e) => setContactNo(e.target.value)}
-          />
+         
           <Input
             mb={4}
             type="password"

@@ -8,7 +8,6 @@ import { useAuth } from "./useAuth";
 interface ISignUpCredentials {
   name: string;
   email: string;
-  contactNo: string;
   password: string;
   confirmPassword: string;
 }
@@ -59,8 +58,8 @@ export const useUser = (): IUseUserReturns => {
       }
     },
     signUpWithEmailPassword: async (credentials) => {
-      const { name, email, contactNo, password, confirmPassword } = credentials;
-      if (!name || !email || !contactNo || !password || !confirmPassword) {
+      const { name, email, password, confirmPassword } = credentials;
+      if (!name || !email ||  !password || !confirmPassword) {
         setNotification({
           type: "error",
           title: "missing credentials",
@@ -78,7 +77,6 @@ export const useUser = (): IUseUserReturns => {
         const res = await axios.post("/auth/signup", {
           name,
           email,
-          contactNo,
           password,
         });
         const { data } = res;

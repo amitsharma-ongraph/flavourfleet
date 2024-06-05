@@ -7,6 +7,7 @@ import { axios } from "../../packages/axios";
 import { ICartItem } from "../../packages/types/entity/ICartItem";
 import { getUser } from "../../packages/realm/userApp";
 import { useNotification } from "@/hooks/useNotification";
+import { OrderStatus } from "../../packages/enums/OrderStatus";
 
 export const StoreProvider: FC<PropsWithChildren> = ({ children }) => {
   const { userId } = useAuth();
@@ -245,8 +246,9 @@ export const StoreProvider: FC<PropsWithChildren> = ({ children }) => {
           setNotification({
             type: "success",
             title: `Your Order Is ${formatedTitle}`,
+            link:`/profile/orders/track/${change.fullDocument._id}`
           });
-        }
+        } 
       };
 
       try {

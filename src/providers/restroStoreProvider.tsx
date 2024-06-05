@@ -106,7 +106,7 @@ export const RestroStoreProvider: FC<PropsWithChildren> = ({ children }) => {
 
           dispatch({
             type: "setOrders",
-            data: [...state.orders, order],
+            data: [ order,...state.orders],
           });
 
           setNotification({

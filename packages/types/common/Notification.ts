@@ -6,4 +6,5 @@ export interface Notification {
   description?: ReactNode;
   path?: string;
   pathAs?: string;
+  link?:string
 }

@@ -14,7 +14,7 @@ export default function HomePage() {
         title="All Restaurants"
         fetchUrl={RestroListUrls.AllRestro}
       ></CompleteRestroList>
-    </>
+    </> 
   );
 }
 
