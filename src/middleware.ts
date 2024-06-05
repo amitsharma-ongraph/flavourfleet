@@ -15,11 +15,14 @@ export async function middleware(request: NextRequest) {
     const requestUrl = `${process.env.NEXT_PUBLIC_BASE_API_URL}/auth/verification/role`;
     console.log("Request URL:", requestUrl);
 
+  
     const res = await fetch(requestUrl, {
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
-        Cookie: cookieHeader,
+        'Content-Type': 'application/json',
+        'Cookie': cookieHeader,
       },
+      
     });
     console.log("complete")
     if (!res.ok) {
