@@ -96,7 +96,7 @@ function SearchBar() {
   return (
     <Flex
       w={"full"}
-      h={"full"}
+      h={"40px"}
       justifyContent={"center"}
       alignItems={"center"}
       position={"relative"}

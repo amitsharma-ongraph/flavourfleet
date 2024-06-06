@@ -140,7 +140,7 @@ const MapSearchBar: FC<{
                 onClick={() => {
                   setKeyword("");
                   setOptions([]);
-                  console.log("result coordinates", option.lon, option.lat);
+
                   const lon = parseFloat(option.lon);
                   const lat = parseFloat(option.lat);
                   if (handleClick) handleClick(lon, lat);

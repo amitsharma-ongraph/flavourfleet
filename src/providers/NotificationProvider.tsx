@@ -17,7 +17,6 @@ import { Notification } from "../../packages/types/common/Notification";
 import { NotificationContext } from "@/context/notficationContext";
 import { useRouter } from "next/navigation";
 
-
 var timeout: Maybe<NodeJS.Timeout>;
 
 export const NotificationProvider: FC<PropsWithChildren> = ({ children }) => {
@@ -25,14 +24,13 @@ export const NotificationProvider: FC<PropsWithChildren> = ({ children }) => {
     useState<Nullable<Notification>>(null);
   const colorValue = useColorModeValue("lg", "md-dark");
 
-  const {push}=useRouter();
+  const { push } = useRouter();
 
   useEffect(() => {
     if (notification) {
       if (timeout) clearTimeout(timeout);
       timeout = setTimeout(() => {
         setNotification(null);
-        console.log("notification cleared");
       }, 5000);
     }
 
@@ -74,10 +72,9 @@ export const NotificationProvider: FC<PropsWithChildren> = ({ children }) => {
                 overflow="hidden"
                 pointerEvents="all"
                 cursor={"pointer"}
-                onClick={()=>{
-                  console.log("clicked on the notification",notification.link)
-                  if(notification&&notification.link){
-                    push(notification.link)
+                onClick={() => {
+                  if (notification && notification.link) {
+                    push(notification.link);
                   }
                 }}
               >

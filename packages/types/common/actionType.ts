@@ -8,4 +8,6 @@ export type ActionType =
   | "addToCart"
   | "removeFromCart"
   | "setOrders"
-  | "updateOrderStatus";
+  | "updateOrderStatus"
+  | "setLiveLocation"
+  | "setSelectedLocation";

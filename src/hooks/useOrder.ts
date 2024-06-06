@@ -3,6 +3,7 @@ import { Notification } from "../../packages/types/common/Notification";
 import { IOrder } from "../../packages/types/entity/IOrder";
 import { usePayment } from "./usePayment";
 import { useStore } from "./useStore";
+import { useUser } from "./useUser";
 
 interface IUseOrderReturns {
   placeOrder: (
@@ -19,8 +20,17 @@ export const useOrder = (): IUseOrderReturns => {
     state: { cart, orders },
   } = useStore();
   const { handlePayment } = usePayment();
+  const { verfifyContact } = useUser();
   return {
     placeOrder: async (restaurantId, userAddressId, note, price) => {
+      const isContactVerified = await verfifyContact();
+      if (!isContactVerified) {
+        return {
+          type: "error",
+          title: "Please Verify Your contact",
+          path: "/verify",
+        };
+      }
       if (!userAddressId) {
         return {
           type: "error",
@@ -45,7 +55,6 @@ export const useOrder = (): IUseOrderReturns => {
           title: "Error while initiating the payment",
         };
       }
-      console.log("signed-->", signed);
       if (signed == false) {
         return {
           type: "error",
@@ -72,7 +81,7 @@ export const useOrder = (): IUseOrderReturns => {
         });
         dispatch({
           type: "setOrders",
-          data: [data.order,...orders],
+          data: [data.order, ...orders],
         });
         return {
           type: "success",

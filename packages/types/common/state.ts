@@ -1,3 +1,4 @@
+import { Address } from "../entity/Address";
 import { ICart } from "../entity/ICart";
 import { IUserPOrder } from "../entity/IUserPOrder";
 import { User } from "../entity/User";
@@ -13,4 +14,6 @@ export interface State {
   loadingStates: LoadingStates;
   cart: ICart;
   orders: IUserPOrder[];
+  selectedLocation: Address | null;
+  liveLocation: Address | null;
 }

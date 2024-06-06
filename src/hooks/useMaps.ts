@@ -84,7 +84,7 @@ export const useMaps = (): IUseMapsReturns => {
             cancelToken: cancleTokenSource.token,
           }
         );
-        console.log(response.data);
+
         return response.data;
       } catch (error) {
         if (_axios.isCancel(error)) {

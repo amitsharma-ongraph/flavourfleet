@@ -9,7 +9,7 @@ function RestroOrdersPage() {
   const {
     state: { orders },
   } = useRestroStore();
-  console.log("orders", orders);
+
   const filters = [
     OrderStatus.Placed,
     OrderStatus.Accepted,
@@ -19,9 +19,9 @@ function RestroOrdersPage() {
     OrderStatus.Delivered,
   ];
   const [activeFilter, setActiveFilter] = useState<string>(OrderStatus.Placed);
-  const getOrders=()=>{
-    return orders.filter(order=>order.status===activeFilter);
-  }
+  const getOrders = () => {
+    return orders.filter((order) => order.status === activeFilter);
+  };
   return (
     <>
       <Flex

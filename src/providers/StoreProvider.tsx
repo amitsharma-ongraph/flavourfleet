@@ -1,5 +1,5 @@
 import { StoreContext } from "@/context/storeContext";
-import { FC, PropsWithChildren, useEffect, useReducer } from "react";
+import { FC, PropsWithChildren, useEffect, useReducer, useState } from "react";
 import { Action } from "../../packages/types/common/action";
 import { State } from "../../packages/types/common/state";
 import { useAuth } from "@/hooks/useAuth";
@@ -8,10 +8,13 @@ import { ICartItem } from "../../packages/types/entity/ICartItem";
 import { getUser } from "../../packages/realm/userApp";
 import { useNotification } from "@/hooks/useNotification";
 import { OrderStatus } from "../../packages/enums/OrderStatus";
+import { Address } from "../../packages/types/entity/Address";
+import _axios from "axios";
 
 export const StoreProvider: FC<PropsWithChildren> = ({ children }) => {
   const { userId } = useAuth();
   const { setNotification } = useNotification();
+  const [locationLoading, setLocationLoading] = useState<boolean>(true);
 
   const [state, dispatch] = useReducer(
     (state: State, action: Action) => {
@@ -52,6 +55,16 @@ export const StoreProvider: FC<PropsWithChildren> = ({ children }) => {
           return {
             ...state,
             orders: action.data,
+          };
+        case "setLiveLocation":
+          return {
+            ...state,
+            liveLocation: action.data,
+          };
+        case "setSelectedLocation":
+          return {
+            ...state,
+            selectedLocation: action.data,
           };
         case "updateOrderStatus": {
           const { orderId, status } = action.data;
@@ -151,6 +164,8 @@ export const StoreProvider: FC<PropsWithChildren> = ({ children }) => {
       },
       cart: {},
       orders: [],
+      selectedLocation: null,
+      liveLocation: null,
     }
   );
 
@@ -246,9 +261,9 @@ export const StoreProvider: FC<PropsWithChildren> = ({ children }) => {
           setNotification({
             type: "success",
             title: `Your Order Is ${formatedTitle}`,
-            link:`/profile/orders/track/${change.fullDocument._id}`
+            link: `/profile/orders/track/${change.fullDocument._id}`,
           });
-        } 
+        }
       };
 
       try {
@@ -262,6 +277,72 @@ export const StoreProvider: FC<PropsWithChildren> = ({ children }) => {
 
     if (state.user) setupChangeStream();
   }, [state.user]);
+
+  useEffect(() => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position: GeolocationPosition) => {
+          const { latitude, longitude } = position.coords;
+          (async () => {
+            try {
+              setLocationLoading(true);
+              const res = await _axios.get(
+                `https://eu1.locationiq.com/v1/reverse?key=${process.env.NEXT_PUBLIC_LOCATIONIQ_API_KEY}&lat=${latitude}&lon=${longitude}&format=json`
+              );
+              const { data } = res;
+              const addresArray = data.display_name.split("_");
+              const addressLine = data.display_name
+                .split(",")
+                .splice(0, 3)
+                .reduce((s: string, w: string, i: number) => {
+                  if (i == addresArray.length + 1) return s + w;
+                  else return s + w + " , ";
+                }, "");
+              const liveAddress: Address = {
+                _id: "id1",
+                addressLine,
+                city: data.address.city,
+                country: data.address.country,
+                zipCode: data.address.postcode,
+                location: {
+                  coordinates: [longitude, latitude],
+                },
+              };
+              dispatch({
+                type: "setLiveLocation",
+                data: liveAddress,
+              });
+            } catch (error) {
+              setLocationLoading(false);
+            }
+          })();
+        },
+        (error: GeolocationPositionError) => {
+          setLocationLoading(false);
+          console.error("Error getting user location:", error);
+        },
+        {
+          enableHighAccuracy: true,
+        }
+      );
+    } else {
+      console.error("Geolocation is not supported by this browser.");
+    }
+  }, []);
+
+  useEffect(() => {
+    if (state.liveLocation) {
+      dispatch({
+        type: "setSelectedLocation",
+        data: state.liveLocation,
+      });
+    } else if (!locationLoading && state.user.addressList) {
+      dispatch({
+        type: "setSelectedLocation",
+        data: state.user.addressList[0],
+      });
+    }
+  }, [state.liveLocation, state.user]);
 
   return (
     <StoreContext.Provider value={{ state, dispatch }}>
