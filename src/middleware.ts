@@ -8,7 +8,7 @@ export async function middleware(request: NextRequest) {
   if (!cookieHeader) {
     return NextResponse.redirect(new URL("/login", request.url));
   }
-  console.log("cookie header", cookieHeader);
+
   try {
     const requestUrl = `${process.env.NEXT_PUBLIC_BASE_API_URL}/auth/verification/role`;
 

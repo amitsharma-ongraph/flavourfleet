@@ -7,6 +7,7 @@ export default async function authenticate(
 ) {
   try {
     const cookies = cookie.parse(req.headers.cookie || "");
+    console.log("cookies ->", cookies);
     Object.keys(cookies).forEach((key) => {
       let cookieString = `${key}=${cookies[key]}; Max-Age=3600; Path=/`;
       res.setHeader("Set-Cookie", cookieString);
