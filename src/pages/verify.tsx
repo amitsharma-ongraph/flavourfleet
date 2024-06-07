@@ -12,12 +12,17 @@ import {
 import React, { FormEvent, useState } from "react";
 import { HiShieldCheck } from "react-icons/hi";
 import { axios } from "../../packages/axios";
+import { useRouter } from "next/router";
 
 function VerifyPage() {
   const [contact, setContact] = useState<string>("");
   const [otp, setOtp] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
   const [sent, setSent] = useState<boolean>(false);
+
+  const {
+    query: { redirect },
+  } = useRouter();
 
   const { setNotification } = useNotification();
 
@@ -77,7 +82,7 @@ function VerifyPage() {
         return setNotification({
           type: "success",
           title: "otp verified",
-          path: "/",
+          path: `/restaurant-menu/${redirect}`,
         });
       } else {
         setTimeout(() => {

@@ -25,11 +25,6 @@ export const userScrollOptions: SidebarOptionProps[] = [
     children: "Orders",
     paths: ["/profile/orders"],
   },
-  {
-    icon: BiMoney,
-    children: "Payment Methods",
-    paths: ["/profile/payment"],
-  },
 ];
 
 export const userFixedOptions: SidebarOptionProps[] = [

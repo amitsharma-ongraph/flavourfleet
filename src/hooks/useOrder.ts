@@ -28,7 +28,7 @@ export const useOrder = (): IUseOrderReturns => {
         return {
           type: "error",
           title: "Please Verify Your contact",
-          path: "/verify",
+          path: `/verify?redirect=${restaurantId}`,
         };
       }
       if (!userAddressId) {
