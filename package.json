@@ -17,6 +17,7 @@
     "axios": "^1.6.8",
     "cloudinary": "^2.2.0",
     "cloudinary-react": "^1.8.1",
+    "cookie": "^0.6.0",
     "framer-motion": "^11.1.7",
     "mongodb": "^6.6.2",
     "next": "14.2.2",
@@ -27,6 +28,7 @@
     "realm-web": "^2.0.0"
   },
   "devDependencies": {
+    "@types/cookie": "^0.6.0",
     "@types/mapbox__polyline": "^1.0.5",
     "@types/maplibre-gl": "^1.14.0",
     "@types/node": "^20",
