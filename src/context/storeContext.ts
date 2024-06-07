@@ -14,6 +14,8 @@ export const StoreContext = createContext<IStoreContext>({
     },
     cart: {},
     orders: [],
+    selectedLocation: null,
+    liveLocation: null,
   },
   dispatch: () => {},
 });

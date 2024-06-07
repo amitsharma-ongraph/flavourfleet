@@ -97,7 +97,6 @@ export const getServerSideProps: GetServerSideProps<IProps> = async (
     query: { id },
   } = context;
 
-  console.log(id);
   try {
     const res = await axios.get(
       process.env.BASE_API_URL + `/order/tracking/${id}`,
@@ -127,7 +126,6 @@ export const getServerSideProps: GetServerSideProps<IProps> = async (
       };
   } catch (error) {
     console.log("error--->", error);
-    console.log("error occured");
   }
 
   return {

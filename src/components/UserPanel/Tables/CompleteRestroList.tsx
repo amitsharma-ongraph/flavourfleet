@@ -23,14 +23,8 @@ const CompleteRestroList: FC<CompleteRestroListProps> = ({
   fetchUrl,
 }) => {
   const {
-    state: { user },
+    state: { user, selectedLocation },
   } = useStore();
-  let longitude: string = "";
-  let latitude: string = "";
-  try {
-    longitude = user?.addressList[0].location.coordinates[0];
-    latitude = user?.addressList[0].location.coordinates[1];
-  } catch (error) {}
 
   const [filters, setFilters] = useState<string[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -44,8 +38,11 @@ const CompleteRestroList: FC<CompleteRestroListProps> = ({
   };
 
   useEffect(() => {
+    if (!selectedLocation) return;
     setLoading(true);
     (async () => {
+      const longitude = selectedLocation.location.coordinates[0];
+      const latitude = selectedLocation.location.coordinates[1];
       try {
         const fetchParam = getFetchParams();
 
@@ -65,7 +62,7 @@ const CompleteRestroList: FC<CompleteRestroListProps> = ({
         }, 1000);
       }
     })();
-  }, [fetchUrl, filters, longitude, latitude]);
+  }, [fetchUrl, filters, selectedLocation]);
 
   useEffect(() => {
     if (restaurants.length > 0) {

@@ -20,6 +20,7 @@ interface IUseUserReturns {
   logOut: () => void;
   continueWithGoogle: () => void;
   authenticate: () => void;
+  verfifyContact:()=>Promise<boolean>;
 }
 
 export const useUser = (): IUseUserReturns => {
@@ -138,5 +139,19 @@ export const useUser = (): IUseUserReturns => {
         });
       }
     },
+    verfifyContact:async ()=>{
+      try {
+        const res=await axios.get("auth/verification/contact");
+        const {data}=res;
+        if(data.success){
+          return true
+        }
+        else{
+          return false
+        }
+      } catch (error) {
+        return false
+      }
+    }
   };
 };

@@ -3,34 +3,28 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
 export async function middleware(request: NextRequest) {
-  console.log("request object --->",request)
   const cookieHeader = request.headers.get("cookie");
 
   if (!cookieHeader) {
-    console.log("No cookies found, redirecting to login.");
     return NextResponse.redirect(new URL("/login", request.url));
   }
 
   try {
     const requestUrl = `${process.env.NEXT_PUBLIC_BASE_API_URL}/auth/verification/role`;
-    console.log("Request URL:", requestUrl);
 
-  
     const res = await fetch(requestUrl, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
-        'Cookie': cookieHeader,
+        "Content-Type": "application/json",
+        Cookie: cookieHeader,
       },
-      
     });
-    console.log("complete")
+
     if (!res.ok) {
       throw new Error("Network response was not ok");
     }
 
     const data = await res.json();
-    console.log("Response data:", data);
 
     if (data.role === "Restaurant") {
       return NextResponse.redirect(new URL("/restaurant", request.url));
@@ -39,7 +33,6 @@ export async function middleware(request: NextRequest) {
     } else if (data.role === "User") {
       return NextResponse.next();
     } else {
-      console.log("Unknown role, redirecting to login.");
       return NextResponse.redirect(new URL("/login", request.url));
     }
   } catch (error) {
@@ -49,6 +42,10 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/","/profile/:path*","/restaurant-menu/:path*","/search/:path*"],
+  matcher: [
+    "/",
+    "/profile/:path*",
+    "/restaurant-menu/:path*",
+    "/search/:path*",
+  ],
 };
-

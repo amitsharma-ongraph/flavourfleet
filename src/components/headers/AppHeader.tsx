@@ -5,6 +5,7 @@ import { useUser } from "@/hooks/useUser";
 
 import { useRouter } from "next/router";
 import SearchBar from "../SearchBar";
+import LocationSelector from "../UserPanel/LocationSelector";
 
 function AppHeader() {
   const { user, userLoaded } = useUser();
@@ -43,7 +44,10 @@ function AppHeader() {
             alignItems={"center"}
             px={5}
             display={{ base: "none", lg: "flex" }}
+            rowGap={3}
+            columnGap={3}
           >
+            <LocationSelector />
             <SearchBar />
           </Flex>
         </GridItem>
