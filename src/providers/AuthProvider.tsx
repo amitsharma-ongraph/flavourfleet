@@ -19,6 +19,7 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
       const data = res.data;
       if (data.success) {
         setUserId(data.userId);
+        const authRes = await fetch("/api/authenticate");
       } else {
         setUserId(null);
       }

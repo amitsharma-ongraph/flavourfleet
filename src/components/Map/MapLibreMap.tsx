@@ -1,4 +1,3 @@
-// components/Map.tsx
 import { useEffect, useRef, useState } from "react";
 import maplibre, { Map as MapLibreMap, Marker } from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
@@ -43,11 +42,9 @@ const Map = () => {
           const { latitude, longitude } = position.coords;
           setUserLocation([longitude, latitude]);
 
-          // Set the map center to the user's location
           map.setCenter([longitude, latitude]);
           map.setZoom(17);
 
-          // Add a marker to the map at the user's location
           new Marker().setLngLat([longitude, latitude]).addTo(map);
         },
         (error: GeolocationPositionError) => {
