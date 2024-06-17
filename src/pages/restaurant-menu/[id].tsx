@@ -6,6 +6,7 @@ import { AppLayout } from "@/components/layouts/AppLayout";
 import { Box } from "@chakra-ui/react";
 import MenuPagePlaceholder from "@/components/placeholders/MenuPagePlaceholder";
 import RestaurantMenu from "@/components/RestaurantMenuPage/RestaurantMenu";
+import { ICoupon } from "../../../packages/types/entity/ICoupon.";
 
 interface IMenuItem {
   name: string;
@@ -27,6 +28,7 @@ interface RestroMenuResult {
   logoUrl: string;
   ratings: string;
   menuGroups: string[];
+  coupons: ICoupon[];
 }
 function RestaurantMenuPage() {
   const router = useRouter();

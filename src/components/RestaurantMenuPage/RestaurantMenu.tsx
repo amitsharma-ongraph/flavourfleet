@@ -9,6 +9,7 @@ import { IoMdRemove } from "react-icons/io";
 import { RiArrowDownCircleFill } from "react-icons/ri";
 import MenuItemsTable from "../UserPanel/Tables/MenuItemsTable";
 import CartButton from "../UserPanel/CartButton";
+import { ICoupon } from "../../../packages/types/entity/ICoupon.";
 
 interface IMenuItem {
   name: string;
@@ -30,6 +31,7 @@ interface RestroMenuResult {
   logoUrl: string;
   ratings: string;
   menuGroups: string[];
+  coupons: ICoupon[];
 }
 
 interface FilterContProps {
@@ -226,8 +228,8 @@ const RestaurantMenu: FC<Props> = ({ restaurant }) => {
                 px={2}
                 justifyContent={{ base: "flex-start", md: "center" }}
               >
-                {TestOffers.map((offer) => (
-                  <OfferCard offer={offer} key={offer.title} />
+                {restaurant.coupons.map((coupon) => (
+                  <OfferCard coupon={coupon} key={coupon._id} />
                 ))}
               </Flex>
               <Flex

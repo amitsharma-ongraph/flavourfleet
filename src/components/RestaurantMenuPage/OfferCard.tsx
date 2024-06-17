@@ -1,8 +1,14 @@
 import React, { FC } from "react";
 import { IOfferCard } from "../../../packages/types/card/IOfferCard";
 import { Box, Flex, Icon, Text } from "@chakra-ui/react";
+import { ICoupon } from "../../../packages/types/entity/ICoupon.";
+import { DiscountType } from "../../../packages/enums/DiscountType";
+import { BiGift } from "react-icons/bi";
+import { CiDiscount1 } from "react-icons/ci";
+import { DiscountCondition } from "../../../packages/enums/DiscountCondition";
 
-const OfferCard: FC<{ offer: IOfferCard }> = ({ offer }) => {
+const OfferCard: FC<{ coupon: ICoupon }> = ({ coupon }) => {
+  const { type, code, condition, billAmount, discount, upto } = coupon;
   return (
     <Flex
       h={"60px"}
@@ -28,13 +34,29 @@ const OfferCard: FC<{ offer: IOfferCard }> = ({ offer }) => {
         alignItems={"center"}
         top={0}
       >
-        <Icon as={offer.icon} color={"brand.900"} />
+        <Icon
+          as={type === DiscountType.GIFT_ITEM ? BiGift : CiDiscount1}
+          color={"brand.900"}
+        />
       </Flex>
-      <Text fontSize={"1em"} color={"brand.900"}>
-        {offer.title}
-      </Text>
+      {type === DiscountType.FLAT && (
+        <Text fontSize={"1em"} color={"brand.900"}>
+          Flat {discount} Off
+        </Text>
+      )}
+      {type === DiscountType.GIFT_ITEM && (
+        <Text fontSize={"1em"} color={"brand.900"}>
+          Free Item
+        </Text>
+      )}
+      {type === DiscountType.PERCENTAGE && (
+        <Text fontSize={"1em"} color={"brand.900"}>
+          {discount}% Off Upto {upto}
+        </Text>
+      )}
       <Text fontSize={"0.7em"} color={"brand.900"}>
-        {offer.description}
+        {code}{" "}
+        {condition === DiscountCondition.AMOUNT ? ` | Above ${billAmount}` : ""}
       </Text>
     </Flex>
   );

@@ -14,6 +14,7 @@ import {
 import { FaBars, FaClipboardList, FaUtensils } from "react-icons/fa";
 import { GiDesert } from "react-icons/gi";
 import { IoMdRestaurant } from "react-icons/io";
+import { RiCoupon2Fill } from "react-icons/ri";
 
 export const restroScrollOptions: SidebarOptionProps[] = [
   {
@@ -42,9 +43,12 @@ export const restroScrollOptions: SidebarOptionProps[] = [
     paths: ["/restaurant/dashboard/orders"],
   },
   {
-    icon: BiMoney,
-    children: "Payment Methods",
-    paths: ["/restaurant/dashboard/payment"],
+    icon: RiCoupon2Fill,
+    children: "Coupons",
+    paths: [
+      "/restaurant/dashboard/coupons",
+      "/restaurant/dashboard/coupons/new",
+    ],
   },
 ];
 
