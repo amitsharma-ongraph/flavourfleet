@@ -21,7 +21,13 @@ const BillCard: FC<{ bill: IBill }> = ({ bill }) => {
           columnGap={2}
         >
           <Icon as={RiBillFill}></Icon>
-          Total Bill: ₹ {bill.toPay}
+          <Text>Total Bill: </Text>
+          {bill.discount > 0 && (
+            <Text textDecoration={"line-through"}>
+              ₹{Math.floor(bill.grandTotal)}
+            </Text>
+          )}
+          <Text>₹{bill.toPay}</Text>
         </Flex>
         <Icon
           as={!showFull ? FaArrowRight : FaArrowDown}
@@ -98,6 +104,17 @@ const BillCard: FC<{ bill: IBill }> = ({ bill }) => {
               <Text>Grand Total</Text>
               <Text>₹{bill.grandTotal}</Text>
             </Flex>
+
+            {bill.discount && (
+              <Flex
+                flexDirection={"row"}
+                alignItems={"center"}
+                justifyContent={"space-between"}
+              >
+                <Text>Discount</Text>
+                <Text>- ₹{bill.discount}</Text>
+              </Flex>
+            )}
 
             <Flex
               flexDirection={"row"}
