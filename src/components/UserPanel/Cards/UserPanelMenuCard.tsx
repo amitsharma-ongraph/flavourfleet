@@ -11,7 +11,8 @@ const UserPanelMenuCard: FC<{
   menuItem: IUserPMenuItem;
   restaurantId: string;
   isCartItem?: boolean;
-}> = ({ menuItem, restaurantId, isCartItem }) => {
+  isGiftItem?: boolean;
+}> = ({ menuItem, restaurantId, isCartItem, isGiftItem }) => {
   const {
     dispatch,
     state: {
@@ -80,7 +81,15 @@ const UserPanelMenuCard: FC<{
           </Flex>
           <Text fontSize={"0.6em"}>{menuItem.totalReview} votes</Text>
         </Flex>
-        <Text fontSize={"0.8em"}>{formattedPrice}</Text>
+        <Flex columnGap={2}>
+          <Text
+            fontSize={"0.8em"}
+            textDecoration={isGiftItem ? "line-through" : "none"}
+          >
+            {formattedPrice}
+          </Text>
+          {isGiftItem && <Text>₹0</Text>}
+        </Flex>
         <Text fontSize={"0.6em"}>{menuItem.description}</Text>
       </Flex>
       <Flex justifyContent={"center"} alignItems={"center"}>
@@ -93,61 +102,63 @@ const UserPanelMenuCard: FC<{
           <Box h={"full"} w={"full"} borderRadius={"10px"} overflow={"hidden"}>
             <Image src={menuItem.imageUrl} h={"full"} w={"full"} />
           </Box>
-          <Flex
-            position={"absolute"}
-            height={"30px"}
-            w={"60px"}
-            borderRadius={"10px"}
-            left={"50%"}
-            bottom={"-10px"}
-            bg={"brand.50"}
-            transform={"translate(-50%,0%)"}
-            justifyContent={"center"}
-            alignItems={"center"}
-            border={"solid"}
-            borderColor={"brand.900"}
-            borderWidth={"1px"}
-            columnGap={1}
-            fontSize={"0.9em"}
-            color={"brand.900"}
-            fontWeight={700}
-          >
-            {itemCount === 0 && (
-              <Flex
-                cursor={"pointer"}
-                onClick={() => {
-                  addToCart(restaurantId, menuItem);
-                }}
-                h={"full"}
-                w={"full"}
-                justifyContent={"center"}
-                alignItems={"center"}
-              >
-                <Text>ADD</Text>
-              </Flex>
-            )}
-            {itemCount > 0 && (
-              <>
-                <Icon
-                  as={BiMinus}
-                  h={"full"}
-                  cursor={"pointer"}
-                  onClick={() => {
-                    removeFromCart(restaurantId, menuItem.id);
-                  }}
-                ></Icon>
-                <Text fontSize={"1.1em"}>{itemCount}</Text>
-                <Icon
-                  as={BiPlus}
-                  h={"full"}
+          {!isGiftItem && (
+            <Flex
+              position={"absolute"}
+              height={"30px"}
+              w={"60px"}
+              borderRadius={"10px"}
+              left={"50%"}
+              bottom={"-10px"}
+              bg={"brand.50"}
+              transform={"translate(-50%,0%)"}
+              justifyContent={"center"}
+              alignItems={"center"}
+              border={"solid"}
+              borderColor={"brand.900"}
+              borderWidth={"1px"}
+              columnGap={1}
+              fontSize={"0.9em"}
+              color={"brand.900"}
+              fontWeight={700}
+            >
+              {itemCount === 0 && (
+                <Flex
                   cursor={"pointer"}
                   onClick={() => {
                     addToCart(restaurantId, menuItem);
                   }}
-                ></Icon>
-              </>
-            )}
-          </Flex>
+                  h={"full"}
+                  w={"full"}
+                  justifyContent={"center"}
+                  alignItems={"center"}
+                >
+                  <Text>ADD</Text>
+                </Flex>
+              )}
+              {itemCount > 0 && (
+                <>
+                  <Icon
+                    as={BiMinus}
+                    h={"full"}
+                    cursor={"pointer"}
+                    onClick={() => {
+                      removeFromCart(restaurantId, menuItem.id);
+                    }}
+                  ></Icon>
+                  <Text fontSize={"1.1em"}>{itemCount}</Text>
+                  <Icon
+                    as={BiPlus}
+                    h={"full"}
+                    cursor={"pointer"}
+                    onClick={() => {
+                      addToCart(restaurantId, menuItem);
+                    }}
+                  ></Icon>
+                </>
+              )}
+            </Flex>
+          )}
         </Box>
       </Flex>
     </Grid>

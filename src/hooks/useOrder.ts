@@ -1,6 +1,8 @@
 import { axios } from "../../packages/axios";
 import { Notification } from "../../packages/types/common/Notification";
 import { IOrder } from "../../packages/types/entity/IOrder";
+import { IUserPMenuItem } from "../../packages/types/entity/IUserPMenuItem";
+import { MenuItem } from "../../packages/types/entity/MenuItem";
 import { usePayment } from "./usePayment";
 import { useStore } from "./useStore";
 import { useUser } from "./useUser";
@@ -10,7 +12,8 @@ interface IUseOrderReturns {
     restaurantId: string,
     userAddressId: string | undefined,
     note: string | null,
-    price: number
+    price: number,
+    couponCode?: string
   ) => Promise<Notification>;
 }
 
@@ -22,7 +25,13 @@ export const useOrder = (): IUseOrderReturns => {
   const { handlePayment } = usePayment();
   const { verfifyContact } = useUser();
   return {
-    placeOrder: async (restaurantId, userAddressId, note, price) => {
+    placeOrder: async (
+      restaurantId,
+      userAddressId,
+      note,
+      price,
+      couponCode
+    ) => {
       const isContactVerified = await verfifyContact();
       if (!isContactVerified) {
         return {
@@ -66,6 +75,7 @@ export const useOrder = (): IUseOrderReturns => {
           restaurantId,
           userAddressId,
           note,
+          couponCode,
         });
         const { data } = res;
         if (!data.success) {

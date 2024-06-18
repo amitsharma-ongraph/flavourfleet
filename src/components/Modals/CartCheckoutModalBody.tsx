@@ -13,7 +13,7 @@ import React, { useEffect, useState } from "react";
 import { useStore } from "@/hooks/useStore";
 import UserPanelMenuCard from "../UserPanel/Cards/UserPanelMenuCard";
 import NoCartItems from "../UserPanel/NoCartItems";
-import { BiNote, BiRightArrowAlt, BiSad } from "react-icons/bi";
+import { BiCross, BiNote, BiRightArrowAlt, BiSad } from "react-icons/bi";
 import { Address } from "../../../packages/types/entity/Address";
 import { RiBillFill } from "react-icons/ri";
 import { User } from "../../../packages/types/entity/User";
@@ -25,6 +25,8 @@ import BillCard from "../UserPanel/Cards/BillCard";
 import { useModal } from "@/hooks/useModal";
 import { useNotification } from "@/hooks/useNotification";
 import { useOrder } from "@/hooks/useOrder";
+import { ICoupon } from "../../../packages/types/entity/ICoupon.";
+import { IUserPMenuItem } from "../../../packages/types/entity/IUserPMenuItem";
 
 function CartCheckoutModalBody() {
   const { state } = useStore();
@@ -47,6 +49,15 @@ function CartCheckoutModalBody() {
   const cartItems = cart[id] || [];
   const menuItemList = cartItems.map((item) => item.menuItem);
   const [billError, setBillError] = useState<string | null>(null);
+  const [couponInput, setCouponInput] = useState<string>("");
+  const [coupon, setCoupon] = useState<string | null>(null);
+  const [appliedCoupon, setAppliedCoupon] = useState<ICoupon | undefined>(
+    undefined
+  );
+  const [couponError, setCouponError] = useState<string | null>(null);
+  const [freeItem, setFreeItem] = useState<IUserPMenuItem | undefined>();
+
+  console.log("free item-->", freeItem);
 
   const handleNoteSave = () => {
     if (note === null || note === "") {
@@ -68,14 +79,27 @@ function CartCheckoutModalBody() {
       (async () => {
         try {
           setBillError(null);
+          setCouponError(null);
+          setFreeItem(undefined);
           const res = await axios.post("/order/bill", {
             restaurantId: id,
             userAddress: address,
+            couponCode: coupon,
           });
           const { data } = res;
           if (data.success) {
             setBill(data.bill);
             setBillLoading(false);
+            const { couponResponse } = data;
+            if (!couponResponse) return;
+            if (couponResponse.success) {
+              setAppliedCoupon(couponResponse.appliedCoupon);
+              if (couponResponse.freeItem) {
+                setFreeItem(couponResponse.freeItem);
+              }
+            } else {
+              setCouponError(couponResponse.error);
+            }
           } else {
             setBill(null);
             setBillLoading(false);
@@ -88,12 +112,14 @@ function CartCheckoutModalBody() {
         }
       })();
     }
-  }, [address, addressEdit, cartItems]);
+  }, [address, addressEdit, cartItems, coupon]);
 
   const handleOrder = async () => {
     setOrderLoading(true);
     if (!bill) return;
-    setNotification(await placeOrder(id, address?._id, note, bill.toPay));
+    setNotification(
+      await placeOrder(id, address?._id, note, bill.toPay, appliedCoupon?.code)
+    );
     setOrderLoading(false);
     setModal(null);
   };
@@ -119,6 +145,18 @@ function CartCheckoutModalBody() {
                     isCartItem={true}
                   />
                 ))}
+                {freeItem && (
+                  <>
+                    <Text>Gift Item</Text>
+                    <UserPanelMenuCard
+                      menuItem={freeItem}
+                      restaurantId={id}
+                      key={freeItem.id}
+                      isCartItem={true}
+                      isGiftItem={true}
+                    />
+                  </>
+                )}
               </Flex>
               {(!savedNote || noteEdit) && (
                 <Flex
@@ -258,7 +296,47 @@ function CartCheckoutModalBody() {
                         Total Bill: ₹ <Spinner />
                       </Flex>
                     )}
-                    {!billLoading && bill && <BillCard bill={bill} />}
+                    {!billLoading && bill && (
+                      <>
+                        <Flex my={1} columnGap={1}>
+                          <Input
+                            borderColor={"brand.900"}
+                            placeholder="Enter Coupon Code"
+                            value={couponInput}
+                            onChange={(e) => {
+                              setCouponInput(e.target.value.toUpperCase());
+                            }}
+                            disabled={appliedCoupon ? true : false}
+                          ></Input>
+                          {!appliedCoupon && (
+                            <Button
+                              colorScheme="teal"
+                              onClick={() => {
+                                setCoupon(couponInput);
+                              }}
+                            >
+                              Apply
+                            </Button>
+                          )}
+                          {appliedCoupon && (
+                            <Button
+                              colorScheme="teal"
+                              onClick={() => {
+                                setCouponInput("");
+                                setCoupon(null);
+                                setAppliedCoupon(undefined);
+                              }}
+                            >
+                              remove
+                            </Button>
+                          )}
+                        </Flex>
+                        {couponError && (
+                          <Text color={"red"}>{couponError}</Text>
+                        )}
+                        <BillCard bill={bill} />
+                      </>
+                    )}
                     {!billLoading && billError && (
                       <Text color={"red"}> {billError}</Text>
                     )}
