@@ -5,7 +5,6 @@ import type { NextRequest } from "next/server";
 
 export async function middleware(request: NextRequest) {
   const cookieHeader = request.headers.get("cookie");
-  console.log("request cookies in middleware",request.cookies)
   if (!cookieHeader) {
     return NextResponse.redirect(new URL("/login", request.url));
   }
