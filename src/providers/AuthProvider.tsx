@@ -2,10 +2,11 @@ import { AuthContext } from "@/context/authContext";
 import { FC, PropsWithChildren, useEffect, useState } from "react";
 import { axios } from "../../packages/axios";
 import _axios from "axios"
+import { useRouter } from "next/router";
 
 export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
   const [userId, setUserId] = useState<string | null>(null);
-
+  const {push}=useRouter();
   const reset = () => {
     authenticate();
     return null;
@@ -23,7 +24,9 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
           message:"request body",
           cookies:data.cookies
         }) 
+        
         setUserId(data.userId);
+        push("/")
       } else {
         setUserId(null);
       }
