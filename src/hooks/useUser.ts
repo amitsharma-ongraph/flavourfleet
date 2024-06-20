@@ -113,6 +113,7 @@ export const useUser = (): IUseUserReturns => {
 
     logOut: async () => {
       try {
+        await _axios.get("/api/logout")
         const res = await axios.get("/auth/logout");
         const { data } = res;
         if (data.success) {
