@@ -6,7 +6,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   
  if (cookies) {
    const cookieArray = cookies.split('; ');
-
+   console.log("logout cookie array",cookies);
    const cookieStrings = cookieArray.map(cookie => {
      const [key] = cookie.split('=');
      return `${key}="null"; Path=/; HttpOnly; Secure; SameSite=None; Max-Age=100000; Expires=${new Date(0).toUTCString()}`;
