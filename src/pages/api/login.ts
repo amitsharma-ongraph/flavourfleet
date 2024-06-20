@@ -9,7 +9,7 @@ export default async  function handler(req: NextApiRequest, res: NextApiResponse
   if (cookies) {
     const cookieStrings = Object.entries(cookies).map(([key, value]) => {
     
-      return `${key}heyhey=${value}; Path=/; HttpOnly; Secure; SameSite=None; Max-Age=3600`;
+      return `${key}=${value}; Path=/; HttpOnly; Secure; SameSite=None; Max-Age=3600`;
     })
     
     res.setHeader('Set-Cookie', cookieStrings);
