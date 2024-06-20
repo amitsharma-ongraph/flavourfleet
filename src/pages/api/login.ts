@@ -14,5 +14,5 @@ export default async  function handler(req: NextApiRequest, res: NextApiResponse
     
     res.setHeader('Set-Cookie', cookieStrings);
   }
-  res.redirect("/")
+  res.status(200).json({ message: "Hello from the API!" });
 }
