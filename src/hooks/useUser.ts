@@ -118,11 +118,10 @@ export const useUser = (): IUseUserReturns => {
         const { data } = res;
         if (data.success) {
           reset();
-          await _axios.get("/api/logout")
           setNotification({
             type: "success",
             title: "Logout succesfull",
-            path: "/login",
+            path: "/",
           });
         }
       } catch (error) {
