@@ -4,6 +4,7 @@ import { useStore } from "./useStore";
 import { axios } from "../../packages/axios";
 import { useNotification } from "./useNotification";
 import { useAuth } from "./useAuth";
+import _axios from "axios";
 
 interface ISignUpCredentials {
   name: string;
@@ -20,7 +21,7 @@ interface IUseUserReturns {
   logOut: () => void;
   continueWithGoogle: () => void;
   authenticate: () => void;
-  verfifyContact:()=>Promise<boolean>;
+  verfifyContact: () => Promise<boolean>;
 }
 
 export const useUser = (): IUseUserReturns => {
@@ -60,7 +61,7 @@ export const useUser = (): IUseUserReturns => {
     },
     signUpWithEmailPassword: async (credentials) => {
       const { name, email, password, confirmPassword } = credentials;
-      if (!name || !email ||  !password || !confirmPassword) {
+      if (!name || !email || !password || !confirmPassword) {
         setNotification({
           type: "error",
           title: "missing credentials",
@@ -139,19 +140,18 @@ export const useUser = (): IUseUserReturns => {
         });
       }
     },
-    verfifyContact:async ()=>{
+    verfifyContact: async () => {
       try {
-        const res=await axios.get("auth/verification/contact");
-        const {data}=res;
-        if(data.success){
-          return true
-        }
-        else{
-          return false
+        const res = await axios.get("auth/verification/contact");
+        const { data } = res;
+        if (data.success) {
+          return true;
+        } else {
+          return false;
         }
       } catch (error) {
-        return false
+        return false;
       }
-    }
+    },
   };
 };
