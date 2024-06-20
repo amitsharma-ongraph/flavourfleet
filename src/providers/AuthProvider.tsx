@@ -19,10 +19,9 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
       const res = await axios.get("/auth/authenticate");
       const data = res.data;
       if (data.success) {
-        await _axios.get("/api/login",{
-          headers: {
-            'Cookie': data.cookies
-          }
+        await _axios.post("/api/login",{
+          message:"request body",
+          cookies:data.cookies
         }) 
         setUserId(data.userId);
       } else {
