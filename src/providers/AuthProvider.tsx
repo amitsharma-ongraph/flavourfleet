@@ -26,7 +26,7 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
         }) 
         
         setUserId(data.userId);
-        push("/")
+        push("/profile")
       } else {
         setUserId(null);
       }
