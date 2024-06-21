@@ -36,7 +36,7 @@ export const useUser = (): IUseUserReturns => {
 
     logInWithEmailPassword: async (email, password) => {
       try {
-        const res = await axios.post("/auth/login", {
+        const res = await _axios.post("/api/login", {
           username: email,
           password,
         });
