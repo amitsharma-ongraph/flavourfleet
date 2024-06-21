@@ -36,11 +36,11 @@ export const useUser = (): IUseUserReturns => {
 
     logInWithEmailPassword: async (email, password) => {
       try {
-        await _axios.post("/api/login", {
+        const response = await _axios.post("/api/login", {
           username: email,
           password,
         });
-
+        console.log("server login response", response);
         const res = await axios.post("/auth/login", {
           username: email,
           password,
@@ -120,6 +120,7 @@ export const useUser = (): IUseUserReturns => {
     logOut: async () => {
       try {
         const res = await _axios.get("/api/logout");
+        console.log("server logout response", res);
         const { data } = res;
         if (data.success) {
           reset();
