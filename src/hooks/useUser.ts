@@ -36,6 +36,11 @@ export const useUser = (): IUseUserReturns => {
 
     logInWithEmailPassword: async (email, password) => {
       try {
+        await _axios.post("/api/login",{
+          username:email,
+          password
+        })
+        
         const res = await axios.post("/auth/login", {
           username: email,
           password,
@@ -44,10 +49,7 @@ export const useUser = (): IUseUserReturns => {
 
         if (data.success) {
           reset();
-          await _axios.post("/api/login",{
-            username:email,
-            password
-          })
+        
           setNotification({
             type: "success",
             title: "Login succesfull",
