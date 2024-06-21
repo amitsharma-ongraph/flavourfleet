@@ -2,10 +2,8 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
-
 export async function middleware(request: NextRequest) {
   const cookieHeader = request.headers.get("cookie");
-  console.log("middle ware cookies",cookieHeader)
   if (!cookieHeader) {
     return NextResponse.redirect(new URL("/login", request.url));
   }
