@@ -22,7 +22,6 @@ export default async function handler(
     `${process.env.NEXT_PUBLIC_BASE_API_URL}/auth/logout`
   );
   const { data } = response;
-  console.log("server side logoutresponse", response.headers["set-cookie"]);
   //  res.setHeader("Set-Cookie", response.headers["set-cookie"] || [""]);
   res.status(200).send(data);
 }

@@ -57,8 +57,6 @@ function CartCheckoutModalBody() {
   const [couponError, setCouponError] = useState<string | null>(null);
   const [freeItem, setFreeItem] = useState<IUserPMenuItem | undefined>();
 
-  console.log("free item-->", freeItem);
-
   const handleNoteSave = () => {
     if (note === null || note === "") {
       setSavedNote(null);

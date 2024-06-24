@@ -31,11 +31,6 @@ const useSearch = (): IUseSearchReturns => {
         });
         return response.data.searchOptions;
       } catch (error) {
-        if (_axios.isCancel(error)) {
-          console.log("Previous request canceled:", error.message);
-        } else {
-          console.error("Error fetching search results:", error);
-        }
         return [];
       }
     },

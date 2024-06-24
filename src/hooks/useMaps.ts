@@ -87,11 +87,6 @@ export const useMaps = (): IUseMapsReturns => {
 
         return response.data;
       } catch (error) {
-        if (_axios.isCancel(error)) {
-          console.log("Previous request canceled:", error.message);
-        } else {
-          console.error("Error fetching search results:", error);
-        }
         return [];
       }
     },
