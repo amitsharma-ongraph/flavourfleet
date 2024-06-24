@@ -39,7 +39,12 @@ function OrdersPage() {
         justifyContent={"flex-start"}
       >
         {filters.map((filter) => (
-          <Flex alignItems={"flex-end"} pr={"10px"} position={"relative"}>
+          <Flex
+            alignItems={"flex-end"}
+            pr={"10px"}
+            position={"relative"}
+            key={filter}
+          >
             {orderCounts[filter] > 0 && (
               <Flex
                 position={"absolute"}
