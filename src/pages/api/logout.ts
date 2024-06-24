@@ -18,8 +18,6 @@ export default async function handler(
   //   res.setHeader("Set-Cookie", cookieStrings);
   // }
 
-  console.log("server side logout request cookies", req.headers.cookie);
-
   const response = await axios.get(
     `${process.env.NEXT_PUBLIC_BASE_API_URL}/auth/logout`
   );

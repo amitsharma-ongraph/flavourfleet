@@ -1,5 +1,5 @@
 import { FormEvent, useState } from "react";
-import { Box, Button, Flex, Input, Link } from "@chakra-ui/react";
+import { Box, Button, Flex, Input, Link, Spinner } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { useUser } from "@/hooks/useUser";
 import { Logo } from "@/components/Logo";
@@ -9,6 +9,7 @@ const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const { logInWithEmailPassword, continueWithGoogle } = useUser();
+  const [loading, setLoading] = useState<boolean>(false);
 
   return (
     <Flex height="100vh" alignItems="center" justifyContent="center">
@@ -34,9 +35,11 @@ const LoginPage = () => {
         <Flex
           direction="column"
           as="form"
-          onSubmit={(e: FormEvent) => {
+          onSubmit={async (e: FormEvent) => {
             e.preventDefault();
-            logInWithEmailPassword(email, password);
+            setLoading(true);
+            await logInWithEmailPassword(email, password);
+            setLoading(false);
           }}
         >
           <Input
@@ -62,8 +65,10 @@ const LoginPage = () => {
             }}
             color={"white"}
             type="submit"
+            disabled={loading}
           >
-            Login
+            {loading && <Spinner />}
+            {!loading && "Login"}
           </Button>
           <Button
             bgColor={"brand.400"}
